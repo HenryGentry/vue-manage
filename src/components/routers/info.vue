@@ -19,6 +19,10 @@
             <td>创建时间</td>
             <td>{{ userInfo.date }}</td>
           </tr>
+          <tr>
+            <td>角色信息</td>
+            <td>{{ userInfo.message }}</td>
+          </tr>
         </tbody>
       </table>
 
@@ -35,7 +39,8 @@ export default {
         id: 1,
         username: '周浩锋',
         remark: '这是一条没有备注的备注',
-        date: '2017-01-01'
+        date: '2017-01-01',
+        message: '这是一段角色信息'
       }
     }
   },

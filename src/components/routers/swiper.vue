@@ -6,8 +6,10 @@
           <tr >
             <th class="text-center">ID</th>
             <th class="text-center">标题</th>
+            <th class="text-center">顺序编号</th>
             <th class="text-center">地址</th>
             <th class="text-center">缩略图</th>
+            <th class="text-center">备注</th>
             <th></th>
             <th></th>
           </tr>
@@ -16,7 +18,9 @@
           <tr v-for="item in list" :key="item.id">
             <td>{{ item.id }}</td>
             <td>{{ item.name }}</td>
+            <td>{{ item.order }}</td>
             <td>{{ item.url }}</td>
+            <td>{{ item.remark }}</td>
             <td><img :src="item.thumbnail" :alt="item.name" class="table-image"></td>
             <td><button class="button" @click="addSwiper">修改</button></td>
             <td><button class="button alert">删除</button></td>
@@ -40,23 +44,31 @@ export default {
       list: [{
         id: 1,
         name: '测试图片一',
+        order: '1',
         url: 'https://www.baidu.com',
-        thumbnail: '../../resources/kite.jpg'
+        thumbnail: '../../resources/kite.jpg',
+        remark: '这是一条备注'
       }, {
         id: 1,
         name: '测试图片一',
+        order: '2',
         url: 'https://www.baidu.com',
-        thumbnail: '../../resources/kite.jpg'
+        thumbnail: '../../resources/kite.jpg',
+        remark: '这是一条备注'
       }, {
         id: 1,
         name: '测试图片一',
+        order: '3',
         url: 'https://www.baidu.com',
-        thumbnail: '../../resources/kite.jpg'
+        thumbnail: '../../resources/kite.jpg',
+        remark: '这是一条备注'
       }, {
         id: 1,
         name: '测试图片一',
+        order: '4',
         url: 'https://www.baidu.com',
-        thumbnail: '../../resources/kite.jpg'
+        thumbnail: '../../resources/kite.jpg',
+        remark: '这是一条备注'
       }]
     }
   },

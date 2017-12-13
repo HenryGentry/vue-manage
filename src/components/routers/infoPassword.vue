@@ -2,12 +2,13 @@
   <div>
     <go-back level="info"></go-back>
 
-    <form>
+    <form data-abide novalidate>
       <div class="grid-container">
         <div class="grid-x align-center">
           <div class="medium-6 text-left ">
             <label for="oldPassword">旧密码：
-              <input type="password" placeholder="请输入旧密码">
+              <input type="password" id="oldPassword" placeholder="请输入旧密码" required>
+              <span class="form-error">请输入旧密码</span>
             </label>
             <label for="newPassword">新密码：
               <input type="password" placeholder="请输入新密码">

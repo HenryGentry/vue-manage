@@ -9,6 +9,7 @@
         <li><router-link to="/home/info">个人信息</router-link></li>
         <li><router-link to="/home/swiper">轮播图管理</router-link></li>
         <li><router-link to="/home/news">新闻管理</router-link></li>
+        <li><router-link to="/home/classify">新闻分类</router-link></li>
         <li><router-link to="/home/product">产品管理</router-link></li>
         <li><router-link to="/home/company">公司信息</router-link></li>
         <li><router-link to="/home/manager">管理员</router-link></li>

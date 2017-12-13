@@ -12,6 +12,8 @@ import productAdd from '@/components/routers/productAdd'
 import swiper from '@/components/routers/swiper'
 import swiperChange from '@/components/routers/swiperChange'
 import company from '@/components/routers/company'
+import classify from '@/components/routers/classify'
+import classifyAdd from '@/components/routers/classifyAdd'
 
 Vue.use(Router)
 
@@ -67,6 +69,14 @@ export default new Router({
           path: 'productAdd',
           name: 'productAdd',
           component: productAdd
+        }, {
+          path: 'classify',
+          name: 'classify',
+          component: classify
+        }, {
+          path: 'classifyAdd',
+          name: 'classifyAdd',
+          component: classifyAdd
         }
       ]
     }
