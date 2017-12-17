@@ -1,27 +1,24 @@
 <template>
   <div>
+    <app-nav currentIndex="0"></app-nav>
     <div class="info-container">
       <table>
         <tbody>
           <tr>
-            <td>ID</td>
-            <td>{{ userInfo.id }}</td>
+            <td>用户ID</td>
+            <td>{{ userInfo.userId }}</td>
           </tr>
           <tr>
             <td>用户名</td>
-            <td>{{ userInfo.username }}</td>
-          </tr>
-          <tr>
-            <td>备注</td>
-            <td>{{ userInfo.remark }}</td>
+            <td>{{ userInfo.userName }}</td>
           </tr>
           <tr>
             <td>创建时间</td>
-            <td>{{ userInfo.date }}</td>
+            <td>{{ userInfo.createTime }}</td>
           </tr>
           <tr>
-            <td>角色信息</td>
-            <td>{{ userInfo.message }}</td>
+            <td>角色名称</td>
+            <td>{{ userInfo.roleName }}</td>
           </tr>
         </tbody>
       </table>
@@ -32,22 +29,36 @@
 </template>
 
 <script>
+import Nav from '../Nav'
+
 export default {
   data () {
     return {
-      userInfo: {
-        id: 1,
-        username: '周浩锋',
-        remark: '这是一条没有备注的备注',
-        date: '2017-01-01',
-        message: '这是一段角色信息'
-      }
+      userInfo: {}
     }
+  },
+  created () {
+    this.getUserInfo()
   },
   methods: {
     changePassword () {
-      this.$router.push('infoPassword')
+      this.$router.push('infoPassword?id=' + this.userInfo.userId + '&userName=' + this.userInfo.userName)
+    },
+    getUserInfo () {
+      let self = this
+      this.$http.get('/api/user/get', {})
+      .then(res => {
+        if (res.data.code === '401') {
+          self.$router.push('/login')
+        }
+        if (res.data.code === '0') {
+          self.userInfo = res.data.user
+        }
+      })
     }
+  },
+  components: {
+    appNav: Nav
   }
 }
 </script>

@@ -10,25 +10,14 @@
 
 <script>
   export default {
-    data () {
-      return {
-        login: true
-      }
-    },
     created () {
       this.checkLogin()
     },
     methods: {
       checkLogin () {
-        if (!this.login) {
-          this.$router.push('/login')
-        } else {
-          this.$router.push('/home/info')
-        }
+        this.$router.push('/home/info')
       }
     }
-  /* 登录选项 */
-  /* !this.getCookie('session')  */
   }
 </script>
 

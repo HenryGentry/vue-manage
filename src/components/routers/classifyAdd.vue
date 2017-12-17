@@ -1,31 +1,99 @@
 <template>
   <div>
     <go-back level="classify"></go-back>
-    <form action="">
       <div class="grid-container">
-        <div class="grid-x align-center">
+        <div class="grid-x">
           <div class="medium-6 text-left">
             <label for="name">分类名称
-              <input type="text" name="name">
+              <input type="text" name="name" v-model="categoryName">
             </label>
             <label for="describe">分类描述
-              <textarea name="describe" id="describe" rows="10"></textarea>
+              <textarea name="describe" id="describe" rows="10" maxlength="120" v-model="categoryDesc"></textarea>
             </label>
-            <input type="submit" class="button" value="确认提交">
+            <input type="submit" class="button" value="确认提交" @click="submit">
             <input type="reset" class="button alert" value="取消">
           </div>   
         </div>
       </div>
-    </form>
+
   </div>
 </template>
 
 <script>
 import goBack from '../GoBack'
 export default {
+  props: ['type', 'id'],
+  created () {
+    if (this.type === 'update') {
+      this.query()
+    }
+  },
+  data () {
+    return {
+      categoryName: '',
+      categoryDesc: ''
+    }
+  },
   components: {
     goBack: goBack
+  },
+  methods: {
+    query () {
+      let self = this
+      this.$http.post('/api/category/getById', {
+        categoryId: self.id 
+      })
+      .then((res) => {
+        if (res.data.code === '0') {
+          self.categoryName = res.data.category.categoryName
+          self.categoryDesc = res.data.category.categoryDesc
+        }
+      })
+    },
+    submit () {
+      if (this.type === 'add') {
+        let self = this
+        this.$http.post('/api/category/create', {
+          categoryName: self.categoryName,
+          categoryDesc: self.categoryDesc
+        })
+        .then(res => {
+          if (res.data.code === '0') {
+            alert('新增分类成功')
+            self.$router.push('classify')
+          } else if (res.data.code === '28000010') {
+            alert('新增名称已存在')
+          } else {
+            alert('新增分类失败')
+          }
+        })
+      }
+      if (this.type === 'update') {
+        let self = this
+        this.$http.post('/api/category/update', {
+          categoryName: self.categoryName,
+          categoryDesc: self.categoryDesc,
+          categoryId: self.id
+        })
+        .then(res => {
+          if (res.data.code === '0') {
+            alert('更新分类成功')
+            self.$router.push('classify')
+          } else if (res.data.code === '28000010') {
+            alert('分类名称已存在')
+          } else {
+            alert('更新分类失败')
+          }
+        })
+      }
+    }
   }
 }
 </script>
+
+<style>
+  textarea {
+    resize: none
+  }
+</style>
 

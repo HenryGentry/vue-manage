@@ -1,35 +1,40 @@
 <template>
   <div>
+    <app-nav currentIndex="1"></app-nav>
     <div class="swiper-container">
       <table>
         <thead>
-          <tr >
-            <th class="text-center">ID</th>
+          <tr>
+            <th class="text-center">编号</th>
             <th class="text-center">标题</th>
-            <th class="text-center">顺序编号</th>
+            <th class="text-center">轮播顺序</th>
             <th class="text-center">地址</th>
             <th class="text-center">缩略图</th>
             <th class="text-center">备注</th>
-            <th></th>
-            <th></th>
+            <th class="text-center">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in list" :key="item.id">
-            <td>{{ item.id }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.order }}</td>
-            <td>{{ item.url }}</td>
+          <tr v-for="(item, index) in list" :key="item.id">
+            <td>{{ index + 1 }}</td>
+            <td>{{ item.slideshowName }}</td>
+            <td>{{ item.orderNum }}</td>
+            <td>{{ item.skipUrl }}</td>
+            <td><img :src="item.imgUrl" alt="" class="table-image"></td>
             <td>{{ item.remark }}</td>
-            <td><img :src="item.thumbnail" :alt="item.name" class="table-image"></td>
-            <td><button class="button" @click="addSwiper">修改</button></td>
-            <td><button class="button alert">删除</button></td>
+            <td>
+              <button 
+                class="button" 
+                @click="updateSwiper('update', item.slideshowId, item.slideshowName, item.skipUrl, item.remark, item.imgUrl, item.imgId)">
+              修改</button>
+              <button class="button alert" @click="deleteSlide(item.slideshowId)">删除</button>
+            </td>
           </tr>
         </tbody>
       </table>
       
       <div class="add-button">
-        <button class="button" @click="addSwiper">+ 添加轮播图</button>
+        <button class="button" @click="updateSwiper('add')">+ 添加轮播图</button>
       </div>
       
     </div>
@@ -37,48 +42,48 @@
 </template>
 
 <script>
+import Nav from '../Nav'
 export default {
   data () {
     return {
-      isAdd: false,
-      list: [{
-        id: 1,
-        name: '测试图片一',
-        order: '1',
-        url: 'https://www.baidu.com',
-        thumbnail: '../../resources/kite.jpg',
-        remark: '这是一条备注'
-      }, {
-        id: 1,
-        name: '测试图片一',
-        order: '2',
-        url: 'https://www.baidu.com',
-        thumbnail: '../../resources/kite.jpg',
-        remark: '这是一条备注'
-      }, {
-        id: 1,
-        name: '测试图片一',
-        order: '3',
-        url: 'https://www.baidu.com',
-        thumbnail: '../../resources/kite.jpg',
-        remark: '这是一条备注'
-      }, {
-        id: 1,
-        name: '测试图片一',
-        order: '4',
-        url: 'https://www.baidu.com',
-        thumbnail: '../../resources/kite.jpg',
-        remark: '这是一条备注'
-      }]
+      list: []
     }
   },
+  created () {
+    this.query()
+  },
   methods: {
-    addSwiper () {
-      this.$router.push('swiperChange')
+    updateSwiper (type, slideshowId, title, skipUrl, remark, imgUrl, imgId) {
+      title = title || ''
+      skipUrl = skipUrl || ''
+      remark = remark || ''
+      imgUrl = imgUrl || ''
+      slideshowId = slideshowId || ''
+      imgId = imgId || ''
+      this.$router.push('swiperChange?type=' + type + '&slideshowId=' + slideshowId +'&orderNum=' + this.list.length + '&title=' + title + '&skipUrl=' + skipUrl + '&remark=' + remark + '&imgUrl=' + imgUrl + '&imgId=' + imgId)
     },
-    cancel () {
-      this.isAdd = !this.isAdd
+    query () {
+      let self = this
+      this.$http.post('/api/slideshow/query', {})
+      .then((res) => {
+        if (res.data.code === '0') {
+          self.list = res.data.slideshowList
+        }
+      })
+    },
+    deleteSlide (slideshowId) {
+      let self = this
+      this.$http.post('/api/slideshow/delete', { slideshowId: slideshowId })
+      .then(res => {
+        if (res.data.code === '0') {
+          alert('删除成功')
+          self.query()
+        }
+      })
     }
+  },
+  components: {
+    appNav: Nav
   }
 }
 </script>

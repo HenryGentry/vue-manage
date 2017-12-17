@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="company-container">
+    <app-nav currentIndex="5"></app-nav>
+    <div class="company-container text-left">
       <label for="header">
         公司名字
         <input type="text" placeholder="公司名字">
@@ -13,3 +14,13 @@
     </div>
   </div>
 </template>
+
+<script>
+import Nav from '../Nav'
+export default {
+  components: {
+    appNav: Nav
+  }
+}
+</script>
+

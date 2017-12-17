@@ -1,9 +1,10 @@
 <template>
   <div>
+    <app-nav currentIndex="2"></app-nav>
     <table>
       <thead>
         <tr>
-          <th class="text-center">ID</th>
+          <th class="text-center">编号</th>
           <th class="text-center">标题</th>
           <th class="text-center">作者</th>
           <th class="text-center">新闻发布时间</th>
@@ -11,68 +12,69 @@
           <th class="text-center">备注</th>
           <th class="text-center">发布状态</th>
           <th class="text-center">所属分类</th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th class="text-center">操作</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>{{ list.id }}</td>
-          <td>{{ list.header }}</td>
-          <td>{{ list.author }}</td>
-          <td>{{ list.date }}</td>
-          <td>{{ list.update }}</td>
-          <td>{{ list.remark }}</td>
-          <td>{{ list.status }}</td>
-          <td>{{ list.classify }}</td>
-          <td><button class="button">修改</button></td>
-          <td><button class="button">删除</button></td>
-          <td><button class="button">发布</button></td>
+        <tr v-for="(item, index) in list" :key="item.newsId">
+          <td>{{ index + 1 }}</td>
+          <td>{{ item.newsTitle }}</td>
+          <td>{{ item.newsAuthor }}</td>
+          <td>{{ item.newsCreateTime }}</td>
+          <td>{{ item.newsUpdateTime }}</td>
+          <td>{{ item.newsRemark }}</td>
+          <td>{{ item.newsStatus }}</td>
+          <td>{{ item.newsCategoryName }}</td>
+          <td>
+            <button class="button">修改</button>
+            <button class="button alert">删除</button>
+            <button class="button">发布</button>
+          </td>
         </tr>
       </tbody>
     </table>
 
-    <button class="button">+ 增加新闻</button>
+    <button class="button" @click="addNews">+ 增加新闻</button>
 
-    <div class="news-container">
-      <input type="text" placeholder="标题">
-      <input type="text" placeholder="作者输入框">
-      <input type="text" placeholder="备注">
-      <select name="classify" id="classify">
-        <option value="aa">aa</option>
-        <option value="bb">bb</option>
-        <option value="cc">cc</option>
-      </select>
-      <quill-editor rows="30"></quill-editor>
-    </div>
+    <ul class="pagination">
+      <li class="pagination-previous"><a href="#">上一页 <span class="show-for-sr">page</span></a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li class="ellipsis"></li>
+      <li><a href="#">4</a></li>
+       <li class="pagination-next"><a href="#">下一页 <span class="show-for-sr">page</span></a></li>
+    </ul>
   </div>  
 </template>
 
 <script>
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
-
-import { quillEditor } from 'vue-quill-editor'
+import Nav from '../Nav'
 
 export default {
   data () {
     return {
-      list: {
-        id: 1,
-        header: '这是一个标题',
-        author: '周浩锋',
-        date: '2017-10-02',
-        update: '2017-10-23',
-        remark: '备注',
-        status: '已发布',
-        classify: 'aaa'
-      }
+      list: []
     }
   },
+  created () {
+    this.queryNews()
+  },
   components: {
-    quillEditor
+    appNav: Nav
+  },
+  methods: {
+    addNews () {
+      this.$router.push('newsAdd')
+    },
+    queryNews () {
+      let self = this
+      this.$http.post('/api/news/query', {})
+      .then((res) => {
+        if (res.data.code === '0') {
+          self.list = res.data.newsList
+        }
+      })
+    }
   }
 }
 </script>

@@ -19,9 +19,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-axios.defaults.baseURL = 'http://zhf.tunnel.qydev.com/mock/20/'
-
 export default {
   data () {
     return {
@@ -32,13 +29,14 @@ export default {
   methods: {
     login: function () {
       let self = this
-      axios.post('api/user/login', {
+      console.log(this.axios)
+      this.$http.post('/api/user/login', {
         userName: this.username,
         password: this.password
       })
       .then(function (response) {
         if (response.data.code === '0') {
-          self.$router.push({path: '/home'})
+          window.location.href = '/home'
         } else {
           alert('密码或者用户名错误，请重新登录')
         }

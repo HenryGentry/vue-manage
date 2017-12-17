@@ -1,57 +1,92 @@
 <template>
   <div>
+    <app-nav currentIndex="4"></app-nav>
     <div class="product-container">
       <table>
         <thead>
           <tr >
-            <th class="text-center">ID</th>
+            <th class="text-center">编号</th>
             <th class="text-center">产品名称</th>
             <th class="text-center">产品备注</th>
             <th class="text-center">产品描述</th>
             <th class="text-center">创建时间</th>
             <th class="text-center">产品图片</th>
-            <th></th>
-            <th></th>
+            <th class="text-center">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in list" :key="item.id">
-            <td>{{ item.id }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.remake }}</td>
-            <td>{{ item.describe }}</td>
-            <td>{{ item.date }}</td>
-            <td><img :src="item.thumbnail" :alt="item.name" class="table-image"></td>
-            <td><button class="button">修改</button></td>
-            <td><button class="button alert">删除</button></td>
+          <tr v-for="(item, index) in list" :key="item.productId">
+            <td>{{ index + 1 }}</td>
+            <td>{{ item.productName}}</td>
+            <td>{{ item.productRemark }}</td>
+            <td>{{ item.productDesc }}</td>
+            <td>{{ item.createTime }}</td>
+            <td><img :src="item.imgUrl" :alt="item.productName" class="table-image"></td>
+            <td>
+              <button class="button" @click="updateProduct('update', item.productId)">修改</button>
+              <button class="button alert" @click="removeProduct(item.productId)">删除</button>
+            </td>
           </tr>
         </tbody>
       </table>
 
-      <button class="button" @click="addProduct">+ 增加产品信息</button>
+      <button class="button" @click="updateProduct('add')">+ 增加产品信息</button>
+
+      <ul class="pagination">
+        <li class="pagination-previous"><a href="#">上一页 <span class="show-for-sr">page</span></a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li class="ellipsis"></li>
+        <li><a href="#">4</a></li>
+        <li class="pagination-next"><a href="#">下一页 <span class="show-for-sr">page</span></a></li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
+import Nav from '../Nav'
 export default {
   data () {
     return {
       isAdd: false,
-      list: [{
-        id: 1,
-        name: '测试图片一',
-        remake: '这是一条备注',
-        describe: '这是一条描述',
-        date: '2017-01-10',
-        thumbnail: '../../resources/kite.jpg'
-      }]
+      list: []
     }
   },
+  created () {
+    this.queryProduct()
+  },
   methods: {
-    addProduct () {
-      this.$router.push('productAdd')
+    queryProduct () {
+      let self = this
+      this.$http.post('/api/product/query', {})
+      .then(res => {
+        if (res.data.code === '0') {
+          self.list = res.data.productList
+        }
+      })
+    },
+    updateProduct (type, id) {
+      id = id || ''
+      this.$router.push('productAdd?type=' + type + '&id=' + id)
+    },
+    removeProduct (id) {
+      let self = this
+      this.$http.post('/api/product/delete', {
+        productId: id
+      })
+      .then(res => {
+        if (res.data.code === '0') {
+          alert('删除成功')
+          self.queryProduct()
+        } else {
+          alert('删除失败')
+        }
+      })
     }
+  },
+  components: {
+    appNav: Nav
   }
 }
 </script>

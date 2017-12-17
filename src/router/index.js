@@ -14,6 +14,7 @@ import swiperChange from '@/components/routers/swiperChange'
 import company from '@/components/routers/company'
 import classify from '@/components/routers/classify'
 import classifyAdd from '@/components/routers/classifyAdd'
+import newsAdd from '@/components/routers/newsAdd'
 
 Vue.use(Router)
 
@@ -56,11 +57,22 @@ export default new Router({
         }, {
           path: 'swiperChange',
           name: 'swiperChange',
-          component: swiperChange
+          component: swiperChange,
+          props: (route) => ({
+            type: route.query.type,
+            slideshowId: route.query.slideshowId,
+            index: route.query.orderNum,
+            title: route.query.title,
+            skip: route.query.skipUrl,
+            mark: route.query.remark,
+            img: route.query.imgUrl,
+            imgId: route.query.imgId
+          })
         }, {
           path: 'infoPassword',
           name: 'infoPassword',
-          component: infoPassword
+          component: infoPassword,
+          props: (route) => ({ id: route.query.id, userName: route.query.userName })
         }, {
           path: 'managerAddUser',
           name: 'managerAddUser',
@@ -68,7 +80,8 @@ export default new Router({
         }, {
           path: 'productAdd',
           name: 'productAdd',
-          component: productAdd
+          component: productAdd,
+          props: (route) => ({ type: route.query.type, id: route.query.id })
         }, {
           path: 'classify',
           name: 'classify',
@@ -76,7 +89,12 @@ export default new Router({
         }, {
           path: 'classifyAdd',
           name: 'classifyAdd',
-          component: classifyAdd
+          component: classifyAdd,
+          props: (route) => ({ type: route.query.type, id: route.query.id })
+        }, {
+          path: 'newsAdd',
+          name: 'newsAdd',
+          component: newsAdd
         }
       ]
     }
