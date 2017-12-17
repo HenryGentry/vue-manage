@@ -29,7 +29,7 @@ export default {
   data () {
     return {
       isActive: true,
-      roleId: "1"
+      roleId: '1'
     }
   },
   created () {

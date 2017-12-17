@@ -72,7 +72,7 @@ export default {
       let reader = new FileReader()
       let self = this
       reader.onload = e => {
-        this.image = e.target.result
+        self.image = e.target.result
       }
       reader.readAsDataURL(file)
     },
@@ -106,11 +106,6 @@ export default {
       let formData = new FormData()
       formData.append('image', this.file)
       formData.append('remark', '产品图')
-      let config = {
-        headers: {
-          'content-type': 'multipart/form-data'
-        }
-      }
       let self = this
       if (this.type === 'add') {
         this.$http.post('/api/image/upload', formData)

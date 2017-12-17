@@ -60,7 +60,7 @@ export default {
       imgUrl = imgUrl || ''
       slideshowId = slideshowId || ''
       imgId = imgId || ''
-      this.$router.push('swiperChange?type=' + type + '&slideshowId=' + slideshowId +'&orderNum=' + this.list.length + '&title=' + title + '&skipUrl=' + skipUrl + '&remark=' + remark + '&imgUrl=' + imgUrl + '&imgId=' + imgId)
+      this.$router.push('swiperChange?type=' + type + '&slideshowId=' + slideshowId + '&orderNum=' + this.list.length + '&title=' + title + '&skipUrl=' + skipUrl + '&remark=' + remark + '&imgUrl=' + imgUrl + '&imgId=' + imgId)
     },
     query () {
       let self = this

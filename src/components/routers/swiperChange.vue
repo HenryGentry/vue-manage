@@ -80,7 +80,7 @@ export default {
       let reader = new FileReader()
       let self = this
       reader.onload = e => {
-        this.image = e.target.result
+        self.image = e.target.result
       }
       reader.readAsDataURL(file)
     },
@@ -103,11 +103,6 @@ export default {
       let formData = new FormData()
       formData.append('image', this.file)
       formData.append('remark', '轮播图')
-      let config = {
-        headers: {
-          'content-type': 'multipart/form-data'
-        }
-      }
       let self = this
       let update = {
         slideshowName: this.slideshowName,
@@ -128,9 +123,8 @@ export default {
             }
           })
       }
-      
       if (this.file !== '') {
-        this.$http.post('/api/image/upload', formData, config)
+        this.$http.post('/api/image/upload', formData)
         .then(res => {
           if (res.data.code === '0') {
             if (this.type === 'update') {
@@ -175,7 +169,6 @@ export default {
           }
         })
       }
-      
     }
   }
 }

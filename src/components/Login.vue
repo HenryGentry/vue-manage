@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     login: function () {
-      let self = this
       console.log(this.axios)
       this.$http.post('/api/user/login', {
         userName: this.username,

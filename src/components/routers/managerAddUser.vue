@@ -39,13 +39,13 @@ export default {
     submit () {
       if (this.userName === '') {
         alert('用户名不能为空')
-        return 
+        return
       }
       if (this.password === '') {
         alert('密码不能为空')
         return
       }
-      if (this.password != this.checkPassword) {
+      if (this.password !== this.checkPassword) {
         console.log(this.password, this.checkPassword)
         alert('密码不相同')
         return
@@ -59,7 +59,7 @@ export default {
         if (res.data.code === '0') {
           alert('新增用户成功')
           self.$router.push('manager')
-        } else if ( res.data.code === '28000000' ) {
+        } else if (res.data.code === '28000000') {
           alert('用户已经存在')
         } else {
           alert('新增用户失败')

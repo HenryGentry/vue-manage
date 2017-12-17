@@ -41,7 +41,7 @@ export default {
     query () {
       let self = this
       this.$http.post('/api/category/getById', {
-        categoryId: self.id 
+        categoryId: self.id
       })
       .then((res) => {
         if (res.data.code === '0') {
