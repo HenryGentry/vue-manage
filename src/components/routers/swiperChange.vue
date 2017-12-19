@@ -27,7 +27,7 @@
           
           <br>
           <input type="button" class="button" value="确认" @click="upload">
-          <input type="reset" class="button alert" value="取消">
+          <input type="reset" class="button alert" value="取消" @click="cancel">
           
       </div>
     </div>
@@ -169,6 +169,9 @@ export default {
           }
         })
       }
+    },
+    cancel () {
+      this.$router.push('swiper')
     }
   }
 }

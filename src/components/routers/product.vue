@@ -64,6 +64,9 @@ export default {
         if (res.data.code === '0') {
           self.list = res.data.productList
         }
+        if (res.data.code === '401') {
+          self.$router.push('/login')
+        }
       })
     },
     updateProduct (type, id) {
@@ -71,6 +74,11 @@ export default {
       this.$router.push('productAdd?type=' + type + '&id=' + id)
     },
     removeProduct (id) {
+      // 二次确认
+      let msg = '确认删除吗?'
+      if (!confirm(msg)) {
+        return
+      }
       let self = this
       this.$http.post('/api/product/delete', {
         productId: id

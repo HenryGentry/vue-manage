@@ -55,11 +55,19 @@ export default {
         if (res.data.code === '0') {
           self.list = res.data.categoryList
         }
+        if (res.data.code === '401') {
+          self.$router.push('/login')
+        }
       })
     },
     deleteClassify (categoryId, newsCount) {
       if (newsCount > 0) {
         alert('该分类下存在新闻，无法删除')
+        return
+      }
+      // 二次确认
+      let msg = '确认删除吗?'
+      if (!confirm(msg)) {
         return
       }
       let self = this

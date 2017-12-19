@@ -73,6 +73,9 @@ export default {
         if (res.data.code === '0') {
           self.list = res.data.newsList
         }
+        if (res.data.code === '401') {
+          self.$router.push('/login')
+        }
       })
     }
   }
