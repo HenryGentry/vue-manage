@@ -4,14 +4,14 @@
       <div class="grid-container">
         <div class="grid-x">
           <div class="medium-6 text-left">
-            <label for="name">分类名称
+            <label for="name">分类名称: <span class="help-text"> 必填</span>
               <input type="text" name="name" v-model="categoryName">
             </label>
-            <label for="describe">分类描述
+            <label for="describe">分类描述: 
               <textarea name="describe" id="describe" rows="10" maxlength="120" v-model="categoryDesc"></textarea>
             </label>
             <input type="submit" class="button" value="确认提交" @click="submit">
-            <input type="reset" class="button alert" value="取消">
+            <input type="reset" class="button alert" value="取消" @click="cancel">
           </div>   
         </div>
       </div>
@@ -52,6 +52,11 @@ export default {
     },
     submit () {
       if (this.type === 'add') {
+        // 参数校验
+        if (!this.validate()) {
+          alert('分类名称不能为空')
+          return
+        }
         let self = this
         this.$http.post('/api/category/create', {
           categoryName: self.categoryName,
@@ -69,6 +74,11 @@ export default {
         })
       }
       if (this.type === 'update') {
+        // 参数校验
+        if (!this.validate()) {
+          alert('分类名称不能为空')
+          return
+        }
         let self = this
         this.$http.post('/api/category/update', {
           categoryName: self.categoryName,
@@ -86,6 +96,15 @@ export default {
           }
         })
       }
+    },
+    cancel () {
+      this.$router.push('classify')
+    },
+    validate () {
+      if (this.categoryName === '') {
+        return false
+      }
+      return true
     }
   }
 }

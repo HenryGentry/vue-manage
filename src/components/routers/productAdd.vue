@@ -4,13 +4,13 @@
       <div class="grid-container">
         <div class="grid-x align-center">
           <div class="medium-6 text-left">
-            <label for="productName">产品名称
+            <label for="productName">产品名称: 
               <input type="text" name="productName" v-model="productName">
             </label>
-            <label for="productRemark">产品备注
+            <label for="productRemark">产品备注: 
               <input type="text" name="productRemark" v-model="productRemark">
             </label>
-            <label for="productDesc">产品描述
+            <label for="productDesc">产品描述: 
               <textarea name="productDesc" rows="5" maxlength="120" v-model="productDesc"></textarea>
             </label>
             
@@ -24,7 +24,7 @@
             </div>
 
             <input type="button" class="button" value="确认提交" @click="submit">
-            <input type="reset" class="button alert" value="放弃修改">
+            <input type="reset" class="button alert" value="放弃修改"　@click="cancel">
           </div>   
         </div>
       </div>
@@ -96,7 +96,7 @@ export default {
     },
     submit () {
       if (this.productName === '') {
-        alert('标题不能为空')
+        alert('产品名称不能为空')
         return
       }
       if (this.image === '') {
@@ -173,6 +173,9 @@ export default {
           })
         }
       }
+    },
+    cancel () {
+      this.$router.push('product')
     }
   }
 }

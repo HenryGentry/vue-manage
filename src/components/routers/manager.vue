@@ -50,6 +50,9 @@ export default {
         if (res.data.code === '0') {
           self.list = res.data.userList
         }
+        if (res.data.code === '401') {
+          self.$router.push('/login')
+        }
       })
     },
     updateUser () {

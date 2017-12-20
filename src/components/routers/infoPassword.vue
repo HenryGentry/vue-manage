@@ -15,7 +15,7 @@
               <input type="password" placeholder="请再次输入新密码" v-model="checkedPassword">
             </label>
             <input type="button" class="button" @click="updatePassword" value="确认">
-            <input type="reset" class="button alert" value="取消">
+            <input type="reset" class="button alert" value="取消" @click="cancel">
           </div>
         </div>
       </div>
@@ -65,10 +65,14 @@ export default {
       .then(res => {
         if (res.data.code === '0') {
           alert('修改密码成功')
+          self.$router.push('info')
         } else {
           alert('修改密码失败')
         }
       })
+    },
+    cancel () {
+      this.$router.push('info')
     }
   }
 }

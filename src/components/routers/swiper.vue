@@ -69,9 +69,17 @@ export default {
         if (res.data.code === '0') {
           self.list = res.data.slideshowList
         }
+        if (res.data.code === '401') {
+          self.$router.push('/login')
+        }
       })
     },
     deleteSlide (slideshowId) {
+      // 二次确认
+      let msg = '确认删除吗?'
+      if (!confirm(msg)) {
+        return
+      }
       let self = this
       this.$http.post('/api/slideshow/delete', { slideshowId: slideshowId })
       .then(res => {
