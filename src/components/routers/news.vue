@@ -37,12 +37,18 @@
     <button class="button" @click="addNews">+ 增加新闻</button>
 
     <ul class="pagination">
-      <li class="pagination-previous"><a href="#">上一页 <span class="show-for-sr">page</span></a></li>
-      <li><a href="#">1</a></li>
-      <li><a href="#">2</a></li>
-      <li class="ellipsis"></li>
-      <li><a href="#">4</a></li>
-       <li class="pagination-next"><a href="#">下一页 <span class="show-for-sr">page</span></a></li>
+      <li class="pagination-previous" :class="{ disabled: currentPage === 1 }" @click="queryNews(currentPage - 1)" v-show="lastPage > 1">
+        <a v-if="currentPage !== 1">上一页<span class="show-for-sr">page</span></a>
+        <span v-else>上一页<span class="show-for-sr">page</span></span>
+      </li>
+      <li v-for="n in lastPage" :key="n" @click="queryNews(n)" :class="{current: currentPage === n}">
+        <span v-if="currentPage === n">{{ n }}</span>
+        <a v-else>{{ n }}</a>
+      </li>
+      <li class="pagination-next" :class="{ disabled: currentPage === lastPage }" @click="queryNews(currentPage + 1)" v-show="lastPage > 1">
+        <a v-if="currentPage !== lastPage">下一页 <span class="show-for-sr">page</span></a>
+        <span v-else>下一页<span class="show-for-sr">page</span></span>
+      </li>
     </ul>
   </div>  
 </template>
@@ -53,7 +59,10 @@ import Nav from '../Nav'
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      total: 0,
+      currentPage: 1,
+      PAGE_SIZE: 5
     }
   },
   created () {
@@ -62,16 +71,28 @@ export default {
   components: {
     appNav: Nav
   },
+  computed: {
+    lastPage () {
+      return Math.ceil(this.total / this.PAGE_SIZE)
+    }
+  },
   methods: {
     addNews () {
       this.$router.push('newsAdd')
     },
-    queryNews () {
+    queryNews (index) {
+      index = index || 1
+      this.currentPage = index
+      let data = {
+        pageIndex: index,
+        pageSize: this.PAGE_SIZE
+      }
       let self = this
-      this.$http.post('/api/news/query', {})
+      this.$http.post('/api/news/query', data)
       .then((res) => {
         if (res.data.code === '0') {
           self.list = res.data.newsList
+          self.total = res.data.total
         }
         if (res.data.code === '401') {
           self.$router.push('/login')

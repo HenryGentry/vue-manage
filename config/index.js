@@ -12,7 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://192.168.1.107:28888/',
+        target: 'http://zhf.ngrok.xiaomiqiu.cn/api/',
+        changeOrigin: true,
         pathRewrite: {
           '^/api': '/'
         }

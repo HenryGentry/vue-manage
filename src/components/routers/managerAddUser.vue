@@ -15,7 +15,7 @@
               <input type="password" v-model="checkPassword" placeholder="请再次输入密码">
             </label>
             <input type="button" class="button" value="确认" @click="submit">
-            <input type="reset" class="button alert" value="重设">
+            <input type="reset" class="button alert" value="返回">
           </div>
         </div>
       </div>

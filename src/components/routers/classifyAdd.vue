@@ -2,7 +2,7 @@
   <div>
     <go-back level="classify"></go-back>
       <div class="grid-container">
-        <div class="grid-x">
+        <div class="grid-x align-center">
           <div class="medium-6 text-left">
             <label for="name">分类名称: <span class="help-text"> 必填</span>
               <input type="text" name="name" v-model="categoryName">

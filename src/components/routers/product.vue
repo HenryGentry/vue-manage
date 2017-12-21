@@ -31,15 +31,6 @@
       </table>
 
       <button class="button" @click="updateProduct('add')">+ 增加产品信息</button>
-
-      <ul class="pagination">
-        <li class="pagination-previous"><a href="#">上一页 <span class="show-for-sr">page</span></a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li class="ellipsis"></li>
-        <li><a href="#">4</a></li>
-        <li class="pagination-next"><a href="#">下一页 <span class="show-for-sr">page</span></a></li>
-      </ul>
     </div>
   </div>
 </template>

@@ -1,6 +1,5 @@
 <template>
-  <div class="container">
-    <form>
+  <div class="container" @keydown.enter="login">
       <div class="text-left">
         <div class="grid-x align-center lead">
           <div class="small-6 medium-4 large-3">
@@ -14,7 +13,6 @@
           </div>
         </div>
       </div>
-    </form>
   </div>
 </template>
 
@@ -28,7 +26,6 @@ export default {
   },
   methods: {
     login: function () {
-      console.log(this.axios)
       this.$http.post('/api/user/login', {
         userName: this.username,
         password: this.password
