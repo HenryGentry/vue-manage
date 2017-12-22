@@ -24,7 +24,7 @@
             </div>
 
             <input type="button" class="button" value="确认提交" @click="submit">
-            <input type="reset" class="button alert" value="放弃修改"　@click="cancel">
+            <input type="reset" class="button alert" value="放弃修改" @click="cancel">
           </div>   
         </div>
       </div>

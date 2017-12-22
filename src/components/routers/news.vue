@@ -26,15 +26,16 @@
           <td>{{ item.newsStatus }}</td>
           <td>{{ item.newsCategoryName }}</td>
           <td>
-            <button class="button">修改</button>
-            <button class="button alert">删除</button>
-            <button class="button">发布</button>
+            <button class="button" @click="updateNews('update', item.newsId)">修改</button>
+            <button class="button alert" @click="removeNews(item.newsId)">删除</button>
+            <button class="button" v-if="item.newsStatus === 0">发&ensp;&ensp;布</button>
+            <button class="button" v-else-if="item.newsStatus === 1">不发布</button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <button class="button" @click="addNews">+ 增加新闻</button>
+    <button class="button" @click="updateNews('add')">+ 增加新闻</button>
 
     <ul class="pagination">
       <li class="pagination-previous" :class="{ disabled: currentPage === 1 }" @click="queryNews(currentPage - 1)" v-show="lastPage > 1">
@@ -77,9 +78,6 @@ export default {
     }
   },
   methods: {
-    addNews () {
-      this.$router.push('newsAdd')
-    },
     queryNews (index) {
       index = index || 1
       this.currentPage = index
@@ -96,6 +94,28 @@ export default {
         }
         if (res.data.code === '401') {
           self.$router.push('/login')
+        }
+      })
+    },
+    updateNews (type, id) {
+      id = id || ''
+      this.$router.push('newsAdd?type=' + type + '&id=' + id)
+    },
+    removeNews (id) {
+      let msg = '确认删除吗?'
+      if (!confirm(msg)) {
+        return
+      }
+      let self = this
+      this.$http.post('/api/news/batchDelete', {
+        newsIdList: [id]
+      })
+      .then(res => {
+        if (res.data.code === '0') {
+          alert('删除成功')
+          self.queryNews()
+        } else {
+          alert('删除失败')
         }
       })
     }

@@ -94,7 +94,8 @@ export default new Router({
         }, {
           path: 'newsAdd',
           name: 'newsAdd',
-          component: newsAdd
+          component: newsAdd,
+          props: (route) => ({ type: route.query.type, id: route.query.id })
         }
       ]
     }
