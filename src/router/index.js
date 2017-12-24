@@ -15,6 +15,10 @@ import company from '@/components/routers/company'
 import classify from '@/components/routers/classify'
 import classifyAdd from '@/components/routers/classifyAdd'
 import newsAdd from '@/components/routers/newsAdd'
+import cases from '@/components/routers/cases'
+import casesAdd from '@/components/routers/casesAdd'
+import project from '@/components/routers/project'
+import projectAdd from '@/components/routers/projectAdd'
 
 Vue.use(Router)
 
@@ -95,6 +99,24 @@ export default new Router({
           path: 'newsAdd',
           name: 'newsAdd',
           component: newsAdd,
+          props: (route) => ({ type: route.query.type, id: route.query.id })
+        }, {
+          path: 'cases',
+          name: 'cases',
+          component: cases
+        }, {
+          path: 'project',
+          name: 'project',
+          component: project
+        }, {
+          path: 'casesAdd',
+          name: 'casesAdd',
+          component: casesAdd,
+          props: (route) => ({ type: route.query.type, id: route.query.id, name: route.query.name, remark: route.query.remark })
+        }, {
+          path: 'projectAdd',
+          name: 'projectAdd',
+          component: projectAdd,
           props: (route) => ({ type: route.query.type, id: route.query.id })
         }
       ]

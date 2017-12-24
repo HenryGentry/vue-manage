@@ -59,6 +59,10 @@ export default {
       this.$router.push('managerAddUser')
     },
     deleteUser (id) {
+      let msg = '确认删除吗?'
+      if (!confirm(msg)) {
+        return
+      }
       let self = this
       this.$http.post('/api/user/delete', {
         userId: id

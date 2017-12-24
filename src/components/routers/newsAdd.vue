@@ -30,7 +30,6 @@
     <input type="file" id="upload" accept="image/*" @change="onFileChange" class="show-for-sr" >
 
     <input type="checkbox" v-model="status"><label>是否发布</label>
-
   </div>
 </template>
 
@@ -162,6 +161,8 @@ export default {
       .then((res) => {
         if (res.data.code === '0') {
           self.classifyList = res.data.categoryList
+        } else if (res.data.code === '401') {
+          self.$router.push('/login')
         }
       })
     },
@@ -178,6 +179,8 @@ export default {
           self.status = res.data.news.newsStatus === 1
           self.classify = res.data.news.newsCategoryId
           self.remark = res.data.news.newsRemark
+        } else if (res.data.code === '401') {
+          self.$router.push('/login')
         }
       })
     }

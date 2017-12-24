@@ -4,7 +4,7 @@
     <div class="product-container">
       <table>
         <thead>
-          <tr >
+          <tr>
             <th class="text-center">编号</th>
             <th class="text-center">产品名称</th>
             <th class="text-center">产品备注</th>
@@ -19,9 +19,9 @@
             <td>{{ index + 1 }}</td>
             <td>{{ item.productName}}</td>
             <td>{{ item.productRemark }}</td>
-            <td>{{ item.productDesc }}</td>
+            <td><p class="desc float-center">{{ item.productDesc }}</p></td>
             <td>{{ item.createTime }}</td>
-            <td><img :src="item.imgUrl" :alt="item.productName" class="table-image"></td>
+            <td><img :src="item.imgUrl" :alt="item.imgUrl" class="table-image"></td>
             <td>
               <button class="button" @click="updateProduct('update', item.productId)">修改</button>
               <button class="button alert" @click="removeProduct(item.productId)">删除</button>
@@ -97,4 +97,3 @@ export default {
     max-height: $max-image;
   }
 </style>
-

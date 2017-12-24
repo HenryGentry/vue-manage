@@ -99,10 +99,6 @@ export default {
         alert('产品名称不能为空')
         return
       }
-      if (this.image === '') {
-        alert('图片不能为空')
-        return
-      }
       let formData = new FormData()
       formData.append('image', this.file)
       formData.append('remark', '产品图')
@@ -134,12 +130,13 @@ export default {
       if (this.type === 'update') {
         if (this.file === '') {
           let data = {
+            productId: this.id,
             productName: this.productName,
             productRemark: this.productRemark,
             productDesc: this.productDesc,
             imgId: this.imgId
           }
-          this.$http.post('/api/product/create', data)
+          this.$http.post('/api/product/update', data)
           .then(response => {
             if (response.data.code === '0') {
               alert('更新产品成功')

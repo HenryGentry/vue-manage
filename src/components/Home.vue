@@ -6,14 +6,16 @@
       </div>
 
       <!-- v-bind:class="{ active: isActive }" @click="toggle" -->
-      <ul class="vertical menu sidebar medium-2 lead">
-        <li><router-link to="/home/info">个人信息</router-link></li>
-        <li><router-link to="/home/swiper">轮播图管理</router-link></li>
-        <li><router-link to="/home/news">新闻管理</router-link></li>
-        <li><router-link to="/home/classify">新闻分类</router-link></li>
-        <li><router-link to="/home/product">产品管理</router-link></li>
-        <li><router-link to="/home/company">公司信息</router-link></li>
-        <li v-if="roleId === '1'"><router-link to="/home/manager">管理员</router-link></li>
+      <ul class="vertical menu sidebar medium-2 lead" >
+        <li v-bind:class="{ active: isActive1 }" @click="toggle" id="1"><router-link to="/home/info">个人信息</router-link></li>
+        <li v-bind:class="{ active: isActive2 }" @click="toggle" id="2"><router-link to="/home/swiper">轮播图管理</router-link></li>
+        <li v-bind:class="{ active: isActive3 }" @click="toggle" id="3"><router-link to="/home/news">新闻管理</router-link></li>
+        <li v-bind:class="{ active: isActive4 }" @click="toggle" id="4"><router-link to="/home/classify">新闻分类</router-link></li>
+        <li v-bind:class="{ active: isActive5 }" @click="toggle" id="5"><router-link to="/home/product">产品管理</router-link></li>
+        <li v-bind:class="{ active: isActive6 }" @click="toggle" id="6"><router-link to="/home/company">公司信息</router-link></li>
+        <li v-bind:class="{ active: isActive7 }" @click="toggle" id="7"><router-link to="/home/cases">案例管理</router-link></li>
+        <li v-bind:class="{ active: isActive8 }" @click="toggle" id="8"><router-link to="/home/project">项目管理</router-link></li>
+        <li v-bind:class="{ active: isActive9 }" @click="toggle" id="9" v-if="roleId === '1'"><router-link to="/home/manager">管理员</router-link></li>
       </ul>
    
       <div class="content medium-10">
@@ -28,7 +30,16 @@ import Header from '@/components/Header'
 export default {
   data () {
     return {
-      isActive: true,
+      isActive1: true,
+      isActive2: false,
+      isActive3: false,
+      isActive4: false,
+      isActive5: false,
+      isActive6: false,
+      isActive7: false,
+      isActive8: false,
+      isActive9: false,
+      lastId: '1',
       roleId: '1'
     }
   },
@@ -41,7 +52,30 @@ export default {
   },
   methods: {
     toggle (e) {
-      this.isActive = !this.isActive
+      let id = e.currentTarget.id
+      switch (id) {
+        case '1': this.isActive1 = !this.isActive1; break
+        case '2': this.isActive2 = !this.isActive2; break
+        case '3': this.isActive3 = !this.isActive3; break
+        case '4': this.isActive4 = !this.isActive4; break
+        case '5': this.isActive5 = !this.isActive5; break
+        case '6': this.isActive6 = !this.isActive6; break
+        case '7': this.isActive7 = !this.isActive7; break
+        case '8': this.isActive8 = !this.isActive8; break
+        case '9': this.isActive9 = !this.isActive9; break
+      }
+      switch (this.lastId) {
+        case '1': this.isActive1 = !this.isActive1; break
+        case '2': this.isActive2 = !this.isActive2; break
+        case '3': this.isActive3 = !this.isActive3; break
+        case '4': this.isActive4 = !this.isActive4; break
+        case '5': this.isActive5 = !this.isActive5; break
+        case '6': this.isActive6 = !this.isActive6; break
+        case '7': this.isActive7 = !this.isActive7; break
+        case '8': this.isActive8 = !this.isActive8; break
+        case '9': this.isActive9 = !this.isActive9; break
+      }
+      this.lastId = id
     },
     toInfo () {
       this.$router.push('info')
@@ -55,7 +89,6 @@ export default {
         }
         if (res.data.code === '0') {
           self.roleId = res.data.user.roleId
-          console.log(self.roleId)
         }
       })
     }
@@ -76,8 +109,8 @@ export default {
   }
 
   .active {
-    li {
-      background-color: #15d982;
+    a {
+      background-color: #ffae00;
     }
   }
 
