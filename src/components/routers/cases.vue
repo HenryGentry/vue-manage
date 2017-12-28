@@ -37,6 +37,14 @@ export default {
       list: []
     }
   },
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'casesAdd') {
+      next(vm => {
+        vm.query()
+      })
+    }
+    next()
+  },
   created () {
     this.query()
   },
@@ -68,6 +76,7 @@ export default {
       if (!confirm(msg)) {
         return
       }
+      let self = this
       this.$http.post('/api/case/delete', {
         caseId: id
       })
@@ -76,7 +85,7 @@ export default {
           alert('删除成功')
           self.query()
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         } else {
           alert('删除失败')
         }

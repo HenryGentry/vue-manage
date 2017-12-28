@@ -18,7 +18,7 @@
           <td>{{ item.projectName }}</td>
           <td><p class="desc float-center">{{ item.projectDesc }}</p></td>
           <td>{{ item.caseName }}</td>
-          <td><img :src="item.imgUrl" alt="无法展示图片"></td>
+          <td><img :src="item.imgUrl" alt="无法展示图片" class="table-image"></td>
           <td>
             <button class="button" @click="toProjectAdd('update', item.projectId)">修改</button>
             <button class="button alert">删除</button>
@@ -57,6 +57,14 @@ export default {
       PAGE_SIZE: 5
     }
   },
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'projectAdd') {
+      next(vm => {
+        vm.query()
+      })
+    }
+    next()
+  },
   created () {
     this.query()
   },
@@ -86,7 +94,7 @@ export default {
           self.list = res.data.projectList
           self.total = res.data.total
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     }

@@ -77,7 +77,7 @@ export default {
         if (res.data.code === '0') {
           alert('更新成功')
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     },
@@ -97,7 +97,7 @@ export default {
           self.content = res.data.company.introduction
           self.service = res.data.company.serviceSystem
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     }

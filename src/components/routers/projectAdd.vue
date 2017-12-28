@@ -29,6 +29,7 @@
       </div>
     </div>
     <button class="button" @click="submit">确认提交</button>
+    <button class="button alert" @click="cancle">取消</button>
   </div>
 </template>
 
@@ -96,7 +97,7 @@ export default {
           self.classify = res.data.project.caseId
           self.projectDesc = res.data.project.projectDesc
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     },
@@ -107,18 +108,18 @@ export default {
         if (res.data.code === '0') {
           self.classifyList = res.data.caseList
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     },
     submit () {
       if (this.imageId === '') {
-        this.uploadImag()
+        this.uploadImage()
       } else {
         this.update()
       }
     },
-    uploadImag () {
+    uploadImage () {
       let formData = new FormData()
       formData.append('image', this.file)
       formData.append('remark', '项目图')
@@ -133,7 +134,7 @@ export default {
             self.add()
           }
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         } else {
           alert('请选择一张图片')
         }
@@ -152,9 +153,9 @@ export default {
       .then(res => {
         if (res.data.code === '0') {
           alert('更新项目成功')
-          self.$router.push('project')
+          self.$router.go(-1)
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         } else {
           alert('更新项目失败')
         }
@@ -172,13 +173,16 @@ export default {
       .then(res => {
         if (res.data.code === '0') {
           alert('新增项目成功')
-          self.$router.push('project')
+          self.$router.go(-1)
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         } else {
           alert('新增项目失败')
         }
       })
+    },
+    cancle () {
+      this.$router.go(-1)
     }
   }
 }

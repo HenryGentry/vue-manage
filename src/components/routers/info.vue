@@ -37,6 +37,14 @@ export default {
       userInfo: {}
     }
   },
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'infoPassword') {
+      next(vm => {
+        vm.getUserInfo()
+      })
+    }
+    next()
+  },
   created () {
     this.getUserInfo()
   },
@@ -49,7 +57,7 @@ export default {
       this.$http.get('/api/user/get', {})
       .then(res => {
         if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
         if (res.data.code === '0') {
           self.userInfo = res.data.user

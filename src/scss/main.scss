@@ -18,3 +18,8 @@ $border-color: #ccc;
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
 }
+
+.table-image {
+  max-width: $max-image;
+  max-height: $max-image;
+}

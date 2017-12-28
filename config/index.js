@@ -12,8 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://192.168.1.107:8081/api/',
-        // changeOrigin: true,
+        target: 'http://xinjingjiejy.com/api/',
+        changeOrigin: true,
         pathRewrite: {
           '^/api': '/'
         }
@@ -61,7 +61,7 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, '../dist/'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 

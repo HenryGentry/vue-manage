@@ -40,6 +40,14 @@ export default {
       list: []
     }
   },
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'classifyAdd') {
+      next(vm => {
+        vm.queryClassify()
+      })
+    }
+    next()
+  },
   created () {
     this.queryClassify()
   },
@@ -56,7 +64,7 @@ export default {
           self.list = res.data.categoryList
         }
         if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     },

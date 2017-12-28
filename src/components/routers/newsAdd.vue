@@ -162,7 +162,7 @@ export default {
         if (res.data.code === '0') {
           self.classifyList = res.data.categoryList
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     },
@@ -180,7 +180,7 @@ export default {
           self.classify = res.data.news.newsCategoryId
           self.remark = res.data.news.newsRemark
         } else if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     }

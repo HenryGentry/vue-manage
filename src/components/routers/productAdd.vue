@@ -24,8 +24,8 @@
             </div>
 
             <input type="button" class="button" value="确认提交" @click="submit">
-            <input type="reset" class="button alert" value="放弃修改" @click="cancel">
-          </div>   
+            <input type="reset" class="button alert" value="取消" @click="cancel">
+          </div>
         </div>
       </div>
   </div>
@@ -33,6 +33,7 @@
 
 <script>
 import goBack from '../GoBack'
+import loading from '../Loading'
 export default {
   props: ['type', 'id'],
   data () {
@@ -43,7 +44,8 @@ export default {
       image: '',
       imageSize: 0,
       file: '',
-      imgId: ''
+      imgId: '',
+      isloading: false
     }
   },
   created () {
@@ -52,7 +54,8 @@ export default {
     }
   },
   components: {
-    goBack: goBack
+    goBack: goBack,
+    loading: loading
   },
   methods: {
     onFileChange (e) {
@@ -95,84 +98,76 @@ export default {
       })
     },
     submit () {
-      if (this.productName === '') {
-        alert('产品名称不能为空')
-        return
+      if (this.imgId === '') {
+        this.uploadImage()
+      } else {
+        this.update()
       }
+    },
+    uploadImage () {
       let formData = new FormData()
       formData.append('image', this.file)
       formData.append('remark', '产品图')
       let self = this
-      if (this.type === 'add') {
-        this.$http.post('/api/image/upload', formData)
-        .then(res => {
-          if (res.data.code === '0') {
-            let data = {
-              productName: self.productName,
-              productRemark: self.productRemark,
-              productDesc: self.productDesc,
-              imgId: res.data.imgId
-            }
-            self.$http.post('/api/product/create', data)
-            .then(response => {
-              if (response.data.code === '0') {
-                alert('新增产品成功')
-                self.$router.push('product')
-              } else {
-                alert('新增产品失败')
-              }
-            })
+      return self.$http.post('/api/image/upload', formData)
+      .then(res => {
+        if (res.data.code === '0') {
+          self.imgId = res.data.imgId
+          if (self.type === 'update') {
+            self.update()
           } else {
-            alert('上传图片失败')
+            self.add()
           }
-        })
-      }
-      if (this.type === 'update') {
-        if (this.file === '') {
-          let data = {
-            productId: this.id,
-            productName: this.productName,
-            productRemark: this.productRemark,
-            productDesc: this.productDesc,
-            imgId: this.imgId
-          }
-          this.$http.post('/api/product/update', data)
-          .then(response => {
-            if (response.data.code === '0') {
-              alert('更新产品成功')
-              self.$router.push('product')
-            } else {
-              alert('更新产品失败')
-            }
-          })
+        } else if (res.data.code === '401') {
+          self.$router.push('/admin/login')
         } else {
-          this.$http.post('/api/image/upload', formData)
-          .then(res => {
-            if (res.data.code === '0') {
-              let data = {
-                productName: self.productName,
-                productRemark: self.productRemark,
-                productDesc: self.productDesc,
-                imgId: res.data.imgId
-              }
-              self.$http.post('/api/product/create', data)
-              .then(response => {
-                if (response.data.code === '0') {
-                  alert('更新产品成功')
-                  self.$router.push('product')
-                } else {
-                  alert('更新产品失败')
-                }
-              })
-            } else {
-              alert('上传图片失败')
-            }
-          })
+          alert('请选择一张图片')
         }
+      })
+    },
+    update () {
+      let self = this
+      let data = {
+        productId: this.id,
+        productName: this.productName,
+        productRemark: this.productRemark,
+        imgId: this.imgId,
+        productDesc: this.productDesc
       }
+      this.$http.post('/api/product/update', data)
+      .then(res => {
+        if (res.data.code === '0') {
+          alert('更新产品成功')
+          self.$router.go(-1)
+        } else if (res.data.code === '401') {
+          self.$router.push('/admin/login')
+        } else {
+          alert('更新产品失败')
+        }
+      })
+    },
+    add () {
+      let data = {
+        productName: this.productName,
+        productDesc: this.productDesc,
+        imgId: this.imgId,
+        productRemark: this.productRemark
+      }
+      let self = this
+      this.$http.post('/api/product/create', data)
+      .then(res => {
+        if (res.data.code === '0') {
+          alert('新增产品成功')
+          self.$router.go(-1)
+        } else if (res.data.code === '401') {
+          self.$router.push('/admin/login')
+        } else {
+          alert('新增产品失败')
+        }
+      })
     },
     cancel () {
-      this.$router.push('product')
+      this.$router.go(-1)
     }
   }
 }

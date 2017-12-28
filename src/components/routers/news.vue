@@ -28,8 +28,8 @@
           <td>
             <button class="button" @click="updateNews('update', item.newsId)">修改</button>
             <button class="button alert" @click="removeNews(item.newsId)">删除</button>
-            <button class="button" v-if="item.newsStatus === 0">发&ensp;&ensp;布</button>
-            <button class="button" v-else-if="item.newsStatus === 1">不发布</button>
+            <button class="button" v-if="item.newsStatus === 0" @click="changeStatus(item.newsId)">发&ensp;&ensp;布</button>
+            <button class="button" v-else-if="item.newsStatus === 1" @click="changeStatus(item.newsId)">不发布</button>
           </td>
         </tr>
       </tbody>
@@ -66,6 +66,14 @@ export default {
       PAGE_SIZE: 5
     }
   },
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'newsAdd') {
+      next(vm => {
+        vm.queryNews(vm.currentPage)
+      })
+    }
+    next()
+  },
   created () {
     this.queryNews()
   },
@@ -93,7 +101,7 @@ export default {
           self.total = res.data.total
         }
         if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     },
@@ -113,9 +121,22 @@ export default {
       .then(res => {
         if (res.data.code === '0') {
           alert('删除成功')
-          self.queryNews()
+          self.queryNews(self.currentPage)
         } else {
           alert('删除失败')
+        }
+      })
+    },
+    changeStatus (id) {
+      let self = this
+      this.$http.post('/api/news/updateStatus', {
+        newsId: id
+      })
+      .then(res => {
+        if (res.data.code === '0') {
+          self.queryNews(self.currentPage)
+        } else if (res.data.code === '401') {
+          self.$router.push('/admin/login')
         }
       })
     }
