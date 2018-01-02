@@ -23,7 +23,8 @@
           <td>{{ item.newsCreateTime }}</td>
           <td>{{ item.newsUpdateTime }}</td>
           <td>{{ item.newsRemark }}</td>
-          <td>{{ item.newsStatus }}</td>
+          <td v-if="item.newsStatus==1">已发布</td>
+          <td v-else>未发布</td>
           <td>{{ item.newsCategoryName }}</td>
           <td>
             <button class="button" @click="updateNews('update', item.newsId)">修改</button>

@@ -21,7 +21,7 @@
           <td><img :src="item.imgUrl" alt="无法展示图片" class="table-image"></td>
           <td>
             <button class="button" @click="toProjectAdd('update', item.projectId)">修改</button>
-            <button class="button alert">删除</button>
+            <button class="button alert" @click="deleteProject(item.projectId)">删除</button>
           </td>
         </tr>
       </tbody>
@@ -95,6 +95,24 @@ export default {
           self.total = res.data.total
         } else if (res.data.code === '401') {
           self.$router.push('/admin/login')
+        }
+      })
+    },
+    deleteProject (id) {
+      let msg = '确认删除吗?'
+      if (!confirm(msg)) {
+        return
+      }
+      let self = this
+      this.$http.post('/api/project/delete', {
+        projectId: id
+      })
+      .then(res => {
+        if (res.data.code === '0') {
+          alert('删除成功')
+          self.query(self.currentPage)
+        } else {
+          alert('删除失败')
         }
       })
     }

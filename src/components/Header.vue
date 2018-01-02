@@ -19,7 +19,7 @@
         this.$http.get('/api/user/signOut', {})
         .then(res => {
           if (res.data.code === '0') {
-            self.$router.push('/login')
+            self.$router.push('/admin/login')
           }
         })
       }
