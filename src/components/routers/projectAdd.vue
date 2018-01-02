@@ -5,7 +5,7 @@
       <div class="grid-x align-center">
         <div class="medium-6 text-left">
           <label for="projectName">项目名称: 
-            <input type="text" name="projectName" placeholder="案例名称" v-model="projectName">
+            <input type="text" name="projectName" placeholder="项目名称" v-model="projectName">
           </label>
           <label for="classify">所属分类
             <select name="classify" v-model="classify">
@@ -23,7 +23,7 @@
             <button class="button float-center" @click="removeImage">移除图片</button>
           </div>
           <label for="projectDesc">项目简介 
-            <textarea rows="10" maxlength="120" v-model="projectDesc"></textarea>
+            <textarea rows="10" maxlength="120" v-model="projectDesc" placeholder="项目简介"></textarea>
           </label>
         </div>   
       </div>
