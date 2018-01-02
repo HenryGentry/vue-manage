@@ -15,7 +15,7 @@
     },
     methods: {
       checkLogin () {
-        this.$router.push('/home/info')
+        this.$router.push('/admin/home/info')
       }
     }
   }

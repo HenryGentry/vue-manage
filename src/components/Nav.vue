@@ -2,10 +2,6 @@
   <div>
     <nav>
       <ul class="breadcrumbs custom-breadcrumbs">
-        <!-- <li v-for="(item, index) in list" v-bind:key="item">
-          <span v-if="index == currentIndex">{{ item }}</span>
-          <a v-else>{{ item }}</a>
-        </li> -->
         <li><a>首页</a></li>
         <li><a>{{ list[currentIndex] }}</a></li>
       </ul>
@@ -26,6 +22,8 @@ export default {
         '新闻分类',
         '产品管理',
         '公司信息',
+        '案例管理',
+        '项目管理',
         '管理员'
       ]
     }

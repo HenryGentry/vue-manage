@@ -4,7 +4,7 @@
     <div class="product-container">
       <table>
         <thead>
-          <tr >
+          <tr>
             <th class="text-center">编号</th>
             <th class="text-center">产品名称</th>
             <th class="text-center">产品备注</th>
@@ -19,9 +19,9 @@
             <td>{{ index + 1 }}</td>
             <td>{{ item.productName}}</td>
             <td>{{ item.productRemark }}</td>
-            <td>{{ item.productDesc }}</td>
+            <td><p class="desc float-center">{{ item.productDesc }}</p></td>
             <td>{{ item.createTime }}</td>
-            <td><img :src="item.imgUrl" :alt="item.productName" class="table-image"></td>
+            <td><img :src="item.imgUrl" alt="无法展示图片" class="table-image"></td>
             <td>
               <button class="button" @click="updateProduct('update', item.productId)">修改</button>
               <button class="button alert" @click="removeProduct(item.productId)">删除</button>
@@ -31,15 +31,6 @@
       </table>
 
       <button class="button" @click="updateProduct('add')">+ 增加产品信息</button>
-
-      <ul class="pagination">
-        <li class="pagination-previous"><a href="#">上一页 <span class="show-for-sr">page</span></a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li class="ellipsis"></li>
-        <li><a href="#">4</a></li>
-        <li class="pagination-next"><a href="#">下一页 <span class="show-for-sr">page</span></a></li>
-      </ul>
     </div>
   </div>
 </template>
@@ -53,6 +44,14 @@ export default {
       list: []
     }
   },
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'productAdd') {
+      next(vm => {
+        vm.queryProduct()
+      })
+    }
+    next()
+  },
   created () {
     this.queryProduct()
   },
@@ -65,7 +64,7 @@ export default {
           self.list = res.data.productList
         }
         if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     },
@@ -106,4 +105,3 @@ export default {
     max-height: $max-image;
   }
 </style>
-

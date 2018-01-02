@@ -10,3 +10,16 @@ $arrow-border-width: 2px;
 $arrow-size: 15px;
 $breadcrumbs-item-font-size: 0.85rem;
 $border-color: #ccc;
+
+.desc {
+  width: 500px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+}
+
+.table-image {
+  max-width: $max-image;
+  max-height: $max-image;
+}

@@ -19,7 +19,6 @@
             <td>普通用户</td>
             <td>{{ item.createTime }}</td>
             <td>
-              <button class="button">重设密码</button>
               <button class="button alert" @click="deleteUser(item.userId)">删除用户</button>
             </td>
           </tr>
@@ -39,6 +38,14 @@ export default {
       list: []
     }
   },
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'managerAddUser') {
+      next(vm => {
+        vm.queryUser()
+      })
+    }
+    next()
+  },
   created () {
     this.queryUser()
   },
@@ -51,7 +58,7 @@ export default {
           self.list = res.data.userList
         }
         if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     },
@@ -59,6 +66,10 @@ export default {
       this.$router.push('managerAddUser')
     },
     deleteUser (id) {
+      let msg = '确认删除吗?'
+      if (!confirm(msg)) {
+        return
+      }
       let self = this
       this.$http.post('/api/user/delete', {
         userId: id

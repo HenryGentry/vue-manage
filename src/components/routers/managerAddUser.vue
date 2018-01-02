@@ -14,8 +14,8 @@
             <label for="checkPassword">再次输入密码
               <input type="password" v-model="checkPassword" placeholder="请再次输入密码">
             </label>
-            <input type="button" class="button" value="确认" @click="submit">
-            <input type="reset" class="button alert" value="重设">
+            <input type="button" class="button" value="确认提交" @click="submit">
+            <input type="reset" class="button alert" @click="cancel" value="取消">
           </div>
         </div>
       </div>
@@ -65,6 +65,9 @@ export default {
           alert('新增用户失败')
         }
       })
+    },
+    cancel () {
+      this.$router.push('manager')
     }
   }
 }

@@ -2,7 +2,7 @@
   <div>
     <go-back level="classify"></go-back>
       <div class="grid-container">
-        <div class="grid-x">
+        <div class="grid-x align-center">
           <div class="medium-6 text-left">
             <label for="name">分类名称: <span class="help-text"> 必填</span>
               <input type="text" name="name" v-model="categoryName">
@@ -88,7 +88,7 @@ export default {
         .then(res => {
           if (res.data.code === '0') {
             alert('更新分类成功')
-            self.$router.push('classify')
+            self.$router.go(-1)
           } else if (res.data.code === '28000010') {
             alert('分类名称已存在')
           } else {
@@ -98,7 +98,7 @@ export default {
       }
     },
     cancel () {
-      this.$router.push('classify')
+      this.$router.go(-1)
     },
     validate () {
       if (this.categoryName === '') {

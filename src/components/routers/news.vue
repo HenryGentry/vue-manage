@@ -26,23 +26,30 @@
           <td>{{ item.newsStatus }}</td>
           <td>{{ item.newsCategoryName }}</td>
           <td>
-            <button class="button">修改</button>
-            <button class="button alert">删除</button>
-            <button class="button">发布</button>
+            <button class="button" @click="updateNews('update', item.newsId)">修改</button>
+            <button class="button alert" @click="removeNews(item.newsId)">删除</button>
+            <button class="button" v-if="item.newsStatus === 0" @click="changeStatus(item.newsId)">发&ensp;&ensp;布</button>
+            <button class="button" v-else-if="item.newsStatus === 1" @click="changeStatus(item.newsId)">不发布</button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <button class="button" @click="addNews">+ 增加新闻</button>
+    <button class="button" @click="updateNews('add')">+ 增加新闻</button>
 
     <ul class="pagination">
-      <li class="pagination-previous"><a href="#">上一页 <span class="show-for-sr">page</span></a></li>
-      <li><a href="#">1</a></li>
-      <li><a href="#">2</a></li>
-      <li class="ellipsis"></li>
-      <li><a href="#">4</a></li>
-       <li class="pagination-next"><a href="#">下一页 <span class="show-for-sr">page</span></a></li>
+      <li class="pagination-previous" :class="{ disabled: currentPage === 1 }" @click="queryNews(currentPage - 1)" v-show="lastPage > 1">
+        <a v-if="currentPage !== 1">上一页<span class="show-for-sr">page</span></a>
+        <span v-else>上一页<span class="show-for-sr">page</span></span>
+      </li>
+      <li v-for="n in lastPage" :key="n" @click="queryNews(n)" :class="{current: currentPage === n}">
+        <span v-if="currentPage === n">{{ n }}</span>
+        <a v-else>{{ n }}</a>
+      </li>
+      <li class="pagination-next" :class="{ disabled: currentPage === lastPage }" @click="queryNews(currentPage + 1)" v-show="lastPage > 1">
+        <a v-if="currentPage !== lastPage">下一页 <span class="show-for-sr">page</span></a>
+        <span v-else>下一页<span class="show-for-sr">page</span></span>
+      </li>
     </ul>
   </div>  
 </template>
@@ -53,8 +60,19 @@ import Nav from '../Nav'
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      total: 0,
+      currentPage: 1,
+      PAGE_SIZE: 5
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'newsAdd') {
+      next(vm => {
+        vm.queryNews(vm.currentPage)
+      })
+    }
+    next()
   },
   created () {
     this.queryNews()
@@ -62,19 +80,63 @@ export default {
   components: {
     appNav: Nav
   },
+  computed: {
+    lastPage () {
+      return Math.ceil(this.total / this.PAGE_SIZE)
+    }
+  },
   methods: {
-    addNews () {
-      this.$router.push('newsAdd')
-    },
-    queryNews () {
+    queryNews (index) {
+      index = index || 1
+      this.currentPage = index
+      let data = {
+        pageIndex: index,
+        pageSize: this.PAGE_SIZE
+      }
       let self = this
-      this.$http.post('/api/news/query', {})
+      this.$http.post('/api/news/query', data)
       .then((res) => {
         if (res.data.code === '0') {
           self.list = res.data.newsList
+          self.total = res.data.total
         }
         if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
+        }
+      })
+    },
+    updateNews (type, id) {
+      id = id || ''
+      this.$router.push('newsAdd?type=' + type + '&id=' + id)
+    },
+    removeNews (id) {
+      let msg = '确认删除吗?'
+      if (!confirm(msg)) {
+        return
+      }
+      let self = this
+      this.$http.post('/api/news/batchDelete', {
+        newsIdList: [id]
+      })
+      .then(res => {
+        if (res.data.code === '0') {
+          alert('删除成功')
+          self.queryNews(self.currentPage)
+        } else {
+          alert('删除失败')
+        }
+      })
+    },
+    changeStatus (id) {
+      let self = this
+      this.$http.post('/api/news/updateStatus', {
+        newsId: id
+      })
+      .then(res => {
+        if (res.data.code === '0') {
+          self.queryNews(self.currentPage)
+        } else if (res.data.code === '401') {
+          self.$router.push('/admin/login')
         }
       })
     }

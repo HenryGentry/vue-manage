@@ -1,7 +1,6 @@
 <template>
   <div>
     <go-back level="info"></go-back>
-    <form>
       <div class="grid-container">
         <div class="grid-x align-center">
           <div class="medium-6 text-left ">
@@ -14,13 +13,11 @@
             <label for="Password">确认密码: <span class="help-text">{{ promptA }}</span>
               <input type="password" placeholder="请再次输入新密码" v-model="checkedPassword">
             </label>
-            <input type="button" class="button" @click="updatePassword" value="确认">
+            <input type="button" class="button" @click="updatePassword" value="确认提交">
             <input type="reset" class="button alert" value="取消" @click="cancel">
           </div>
         </div>
       </div>
-    </form>
-
   </div>
 </template>
 

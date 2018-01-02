@@ -15,6 +15,10 @@ import company from '@/components/routers/company'
 import classify from '@/components/routers/classify'
 import classifyAdd from '@/components/routers/classifyAdd'
 import newsAdd from '@/components/routers/newsAdd'
+import cases from '@/components/routers/cases'
+import casesAdd from '@/components/routers/casesAdd'
+import project from '@/components/routers/project'
+import projectAdd from '@/components/routers/projectAdd'
 
 Vue.use(Router)
 
@@ -22,38 +26,56 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/login',
+      path: '/admin/login',
       name: 'login',
       component: Login
     }, {
-      path: '/home/',
+      path: '/admin/home/',
       name: 'home',
       component: Home,
       children: [
         {
           path: 'manager',
           name: 'manager',
-          component: manager
+          component: manager,
+          meta: {
+            keepAlive: true
+          }
         }, {
           path: 'info',
           name: 'info',
-          component: info
+          component: info,
+          meta: {
+            keepAlive: true
+          }
         }, {
           path: 'news',
           name: 'news',
-          component: news
+          component: news,
+          meta: {
+            keepAlive: true
+          }
         }, {
           path: 'product',
           name: 'product',
-          component: product
+          component: product,
+          meta: {
+            keepAlive: true
+          }
         }, {
           path: 'swiper',
           name: 'swiper',
-          component: swiper
+          component: swiper,
+          meta: {
+            keepAlive: true
+          }
         }, {
           path: 'company',
           name: 'company',
-          component: company
+          component: company,
+          meta: {
+            keepAlive: true
+          }
         }, {
           path: 'swiperChange',
           name: 'swiperChange',
@@ -85,7 +107,10 @@ export default new Router({
         }, {
           path: 'classify',
           name: 'classify',
-          component: classify
+          component: classify,
+          meta: {
+            keepAlive: true
+          }
         }, {
           path: 'classifyAdd',
           name: 'classifyAdd',
@@ -94,7 +119,32 @@ export default new Router({
         }, {
           path: 'newsAdd',
           name: 'newsAdd',
-          component: newsAdd
+          component: newsAdd,
+          props: (route) => ({ type: route.query.type, id: route.query.id })
+        }, {
+          path: 'cases',
+          name: 'cases',
+          component: cases,
+          meta: {
+            keepAlive: true
+          }
+        }, {
+          path: 'project',
+          name: 'project',
+          component: project,
+          meta: {
+            keepAlive: true
+          }
+        }, {
+          path: 'casesAdd',
+          name: 'casesAdd',
+          component: casesAdd,
+          props: (route) => ({ type: route.query.type, id: route.query.id, name: route.query.name, remark: route.query.remark })
+        }, {
+          path: 'projectAdd',
+          name: 'projectAdd',
+          component: projectAdd,
+          props: (route) => ({ type: route.query.type, id: route.query.id })
         }
       ]
     }

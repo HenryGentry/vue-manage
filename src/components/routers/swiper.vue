@@ -49,6 +49,14 @@ export default {
       list: []
     }
   },
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'swiperChange') {
+      next(vm => {
+        vm.query()
+      })
+    }
+    next()
+  },
   created () {
     this.query()
   },
@@ -70,7 +78,7 @@ export default {
           self.list = res.data.slideshowList
         }
         if (res.data.code === '401') {
-          self.$router.push('/login')
+          self.$router.push('/admin/login')
         }
       })
     },
@@ -99,10 +107,6 @@ export default {
 
 <style lang="scss" scoped>
   @import '../../scss/main.scss';
-  .table-image {
-    max-width: $max-image;
-    max-height: $max-image;
-  }
   .custom-input {
     display: inline-block;
   }

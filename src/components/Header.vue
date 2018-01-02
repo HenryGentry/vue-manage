@@ -2,7 +2,7 @@
   <div>
     <div class="top-bar header-container">
       <div class="top-bar-left text-left">
-        <h3>后台管理系统</h3>
+        <h3>新净界后台管理系统</h3>
       </div>
       <div class="top-bar-right">
         <button class="button alert" @click="signOut">退出系统</button>
