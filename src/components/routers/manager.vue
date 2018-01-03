@@ -27,15 +27,18 @@
 
       <div class="add-button button" @click="updateUser">新建用户</div>
     </div>
+    <loading v-if="isloading"></loading>
   </div>
 </template>
 
 <script>
 import Nav from '../Nav'
+import loading from '../Loading'
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      isloading: false
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -52,8 +55,10 @@ export default {
   methods: {
     queryUser () {
       let self = this
+      self.isloading = true
       this.$http.post('/api/user/list', {})
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           self.list = res.data.userList
         }
@@ -85,7 +90,8 @@ export default {
     }
   },
   components: {
-    appNav: Nav
+    appNav: Nav,
+    loading: loading
   }
 }
 </script>

@@ -2,12 +2,12 @@
   <div class="overlay">
     <div id="No4">
 		<div class="center">
+      <p class="loading">正在加载...请稍后</p>
 			<span></span>
 			<span></span>
 			<span></span>
 			<span></span>
 			<span></span>
-      <p class="loading">正在加载</p>
 		</div>
 	</div>
   </div>
@@ -20,10 +20,11 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: #050404;
+  opacity:0.85;
 }
 
-#No4{width:500px;height:250px;background: #f2f2f2;position: relative;margin:300px auto;overflow: hidden}
+#No4{width:540px;height:125px;background: #f2f2f2;position: relative;margin:300px auto;overflow: hidden}
 #No4 .center{position: relative;left: 15px;top:40%;}
 #No4 span{width: 6px;height:6px;background: #1779ba;position: absolute;display: block;border-radius: 5px;left: -30px;animation:No_4 2s infinite ease-out;}
 #No4 span:nth-child(2){animation-delay:0.15s;}
@@ -47,7 +48,9 @@
 
 .loading {
   position: relative;
-  top: 30px;
+  top: 0px;
+  font-size: 1.2rem;
+  font-weight: 500;
 }
 </style>
 

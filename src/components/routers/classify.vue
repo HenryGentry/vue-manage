@@ -29,15 +29,19 @@
       </tbody>
     </table>
     <button class="button" @click="updateClassify('add')">+ 新增分类</button>
+
+    <loading v-if="isloading"></loading>
   </div>
 </template>
 
 <script>
 import Nav from '../Nav'
+import loading from '../Loading'
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      isloading: false
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -58,8 +62,10 @@ export default {
     },
     queryClassify () {
       let self = this
+      self.isloading = true
       this.$http.post('/api/category/query', {})
       .then((res) => {
+        self.isloading = false
         if (res.data.code === '0') {
           self.list = res.data.categoryList
         }
@@ -93,7 +99,8 @@ export default {
     }
   },
   components: {
-    appNav: Nav
+    appNav: Nav,
+    loading: loading
   }
 }
 </script>

@@ -31,11 +31,13 @@
       </label>
         <button class="button medium-2 float-center" @click="submit">保存</button>
     </div>
+    <loading v-if="isloading"></loading>
   </div>
 </template>
 
 <script>
 import Nav from '../Nav'
+import loading from '../Loading'
 export default {
   data () {
     return {
@@ -48,14 +50,16 @@ export default {
       email: '',
       content: '',
       service: '',
-      id: null
+      id: null,
+      isloading: false
     }
   },
   created () {
     this.query()
   },
   components: {
-    appNav: Nav
+    appNav: Nav,
+    loading: loading
   },
   methods: {
     submit () {
@@ -72,8 +76,10 @@ export default {
         serviceSystem: this.service
       }
       let self = this
+      self.isloading = true
       this.$http.post('/api/company/update', data)
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           alert('更新成功')
         } else if (res.data.code === '401') {
@@ -83,8 +89,10 @@ export default {
     },
     query () {
       let self = this
+      self.isloading = true
       this.$http.get('/api/company/get')
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           self.id = res.data.company.id
           self.name = res.data.company.name

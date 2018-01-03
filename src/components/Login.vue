@@ -14,24 +14,33 @@
         </div>
       </div>
     </div>
+    <loading v-if="isloading"></loading>
   </div>
 </template>
 
 <script>
+import loading from './Loading'
 export default {
   data () {
     return {
       username: '',
-      password: ''
+      password: '',
+      isloading: false
     }
+  },
+  components: {
+    loading: loading
   },
   methods: {
     login: function () {
+      let self = this
+      self.isloading = true
       this.$http.post('/api/user/login', {
         userName: this.username,
         password: this.password
       })
       .then(function (response) {
+        self.isloading = false
         if (response.data.code === '0') {
           window.location.href = '/admin/home'
         } else {

@@ -32,16 +32,19 @@
 
       <button class="button" @click="updateProduct('add')">+ 增加产品信息</button>
     </div>
+    <loading v-if="isloading"></loading>
   </div>
 </template>
 
 <script>
 import Nav from '../Nav'
+import loading from '../Loading'
 export default {
   data () {
     return {
       isAdd: false,
-      list: []
+      list: [],
+      isloading: false
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -58,8 +61,10 @@ export default {
   methods: {
     queryProduct () {
       let self = this
+      self.isloading = true
       this.$http.post('/api/product/query', {})
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           self.list = res.data.productList
         }
@@ -93,7 +98,8 @@ export default {
     }
   },
   components: {
-    appNav: Nav
+    appNav: Nav,
+    loading: loading
   }
 }
 </script>

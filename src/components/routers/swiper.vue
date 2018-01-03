@@ -37,16 +37,19 @@
         <button class="button" @click="updateSwiper('add')">+ 添加轮播图</button>
       </div>
       
+      <loading v-if="isloading"></loading>
     </div>
   </div>
 </template>
 
 <script>
 import Nav from '../Nav'
+import loading from '../Loading'
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      isloading: false
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -72,8 +75,10 @@ export default {
     },
     query () {
       let self = this
+      self.isloading = true
       this.$http.post('/api/slideshow/query', {})
       .then((res) => {
+        self.isloading = false
         if (res.data.code === '0') {
           self.list = res.data.slideshowList
         }
@@ -99,7 +104,8 @@ export default {
     }
   },
   components: {
-    appNav: Nav
+    appNav: Nav,
+    loading: loading
   }
 }
 </script>
