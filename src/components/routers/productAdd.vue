@@ -2,36 +2,43 @@
   <div>
     <go-back level="product"></go-back>
       <div class="grid-container">
-        <div class="grid-x align-center">
-          <div class="medium-6 text-left">
-            <label for="productName">产品名称: 
-              <input type="text" name="productName" v-model="productName">
-            </label>
-            <label for="productRemark">产品备注: 
-              <input type="text" name="productRemark" v-model="productRemark">
-            </label>
-            <label for="productDesc">产品描述: 
-              <textarea name="productDesc" rows="5" maxlength="120" v-model="productDesc"></textarea>
-            </label>
-            
-            <div v-if="!image">
-              <label for="upload" class="button">上传图片</label>
-              <input type="file" id="upload" accept="image/*" @change="onFileChange" class="show-for-sr">
-            </div>
-            <div v-else>
-              <img :src="image" class="custom-image">
-              <button class="button float-center" @click="removeImage">移除图片</button>
-            </div>
+        <div class="grid-x grid-margin-x align-center text-left">
+          <label for="productName" class="medium-6 cell">产品名称: 
+            <input type="text" name="productName" v-model="productName">
+          </label>
+          <label for="productRemark" class="medium-6 cell">产品备注: 
+            <input type="text" name="productRemark" v-model="productRemark">
+          </label>
+          
+          <label for="productDesc" class="medium-12 cell">产品描述:
+            <quill-editor class="editor" ref="quillEditor" v-model="productDesc"></quill-editor>
+          </label>
 
-            <input type="button" class="button" value="确认提交" @click="submit">
-            <input type="reset" class="button alert" value="取消" @click="cancel">
+          <div v-if="!image">
+            <label for="upload" class="button">上传封面</label>
+            <input type="file" id="upload" accept="image/*" @change="onFileChange" class="show-for-sr">
           </div>
+          <div v-else>
+            <img :src="image" class="custom-image">
+            <button class="button float-center" @click="removeImage">移除图片</button>
+          </div>      
         </div>
+        <input type="button" class="button" value="确认提交" @click="submit">
+        <input type="reset" class="button alert" value="取消" @click="cancel">
+
+        <label for="uploadFile" id="imgInput" class="button" style="display: none;">上传图片</label>
+        <input type="file" id="uploadFile" accept="image/*" @change="uploadFile" class="show-for-sr" >
       </div>
+
+      <loading v-if="isloading"></loading>
   </div>
 </template>
 
 <script>
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import { quillEditor } from 'vue-quill-editor'
 import goBack from '../GoBack'
 import loading from '../Loading'
 export default {
@@ -42,10 +49,15 @@ export default {
       productDesc: '',
       productRemark: '',
       image: '',
-      imageSize: 0,
       file: '',
       imgId: '',
+      addRange: [],
       isloading: false
+    }
+  },
+  computed: {
+    editor () {
+      return this.$refs.quillEditor.quill
     }
   },
   created () {
@@ -54,18 +66,17 @@ export default {
     }
   },
   components: {
+    quillEditor,
     goBack: goBack,
     loading: loading
+  },
+  mounted () {
+    this.editor.getModule('toolbar').addHandler('image', this.imgHandler)
   },
   methods: {
     onFileChange (e) {
       let files = e.target.files || e.dataTransfer.files
       if (!files.length) {
-        return
-      }
-      this.imageSize = files[0].size
-      if (this.imageSize > 4194304) {
-        alert('图片太大，请重新选择')
         return
       }
       this.file = files[0]
@@ -97,7 +108,13 @@ export default {
         }
       })
     },
+    imgHandler () {
+      this.addRange = this.editor.getSelection()
+      let fileInput = document.getElementById('imgInput')
+      fileInput.click()
+    },
     submit () {
+      this.isloading = true
       if (this.imgId === '') {
         this.uploadImage()
       } else {
@@ -121,11 +138,16 @@ export default {
         } else if (res.data.code === '401') {
           self.$router.push('/admin/login')
         } else {
-          alert('请选择一张图片')
+          self.isloading = false
+          alert('请选择一张封面图')
         }
       })
     },
     update () {
+      if (this.productName === '') {
+        alert('请填写产品名称')
+        return
+      }
       let self = this
       let data = {
         productId: this.id,
@@ -136,6 +158,7 @@ export default {
       }
       this.$http.post('/api/product/update', data)
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           alert('更新产品成功')
           self.$router.go(-1)
@@ -156,6 +179,7 @@ export default {
       let self = this
       this.$http.post('/api/product/create', data)
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           alert('新增产品成功')
           self.$router.go(-1)
@@ -168,6 +192,25 @@ export default {
     },
     cancel () {
       this.$router.go(-1)
+    },
+    uploadFile (e) {
+      let files = e.target.files || e.dataTransfer.files
+      if (!files.length) {
+        return
+      }
+      let formData = new FormData()
+      formData.append('image', files[0])
+      formData.append('remark', '产品图')
+      let self = this
+      this.$http.post('/api/image/upload', formData)
+      .then(res => {
+        if (res.data.code === '0') {
+          let imgUrl = res.data.imgUrl
+          self.productDesc = self.productDesc + '<img src=' + imgUrl + '>'
+        } else {
+          alert('插入图片失败')
+        }
+      })
     }
   }
 }

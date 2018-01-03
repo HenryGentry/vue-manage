@@ -28,14 +28,15 @@
           <br>
           <input type="button" class="button" value="确认提交" @click="upload">
           <input type="reset" class="button alert" value="取消" @click="cancel">
-          
       </div>
     </div>
+    <loading v-if="isloading"></loading>
   </div>
 </template>
 
 <script>
 import goBack from '../GoBack'
+import loading from '../Loading'
 export default {
   props: ['type', 'slideshowId', 'index', 'title', 'skip', 'mark', 'img', 'imgId'],
   data () {
@@ -46,14 +47,16 @@ export default {
       remark: '',
       image: '',
       imageSize: 0,
-      file: ''
+      file: '',
+      isloading: false
     }
   },
   created () {
     this.init()
   },
   components: {
-    goBack: goBack
+    goBack: goBack,
+    loading: loading
   },
   methods: {
     init () {
@@ -100,6 +103,7 @@ export default {
         alert('图片不能为空')
         return
       }
+      this.isloading = true
       let formData = new FormData()
       formData.append('image', this.file)
       formData.append('remark', '轮播图')
@@ -115,6 +119,7 @@ export default {
       if (this.file === '') {
         this.$http.post('/api/slideshow/update', update)
           .then(response => {
+            self.isloading = false
             if (response.data.code === '0') {
               alert('更新轮播图成功')
               self.$router.push('swiper')
@@ -138,6 +143,7 @@ export default {
               }
               self.$http.post('/api/slideshow/update', data)
               .then(response => {
+                self.isloading = false
                 if (response.data.code === '0') {
                   alert('更新轮播图成功')
                   self.$router.push('swiper')
@@ -156,6 +162,7 @@ export default {
               }
               self.$http.post('/api/slideshow/create', data)
               .then(response => {
+                self.isloading = false
                 if (response.data.code === '0') {
                   alert('新增轮播图成功')
                   self.$router.push('swiper')
@@ -165,6 +172,7 @@ export default {
               })
             }
           } else {
+            self.isloading = false
             alert('图片上传失败,请重试')
           }
         })

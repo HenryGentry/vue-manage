@@ -1,67 +1,53 @@
 <template>
-  <div>
-    <div class="spinner">
-      <div class="rect1"></div>
-      <div class="rect2"></div>
-      <div class="rect3"></div>
-      <div class="rect4"></div>
-      <div class="rect5"></div>
-    </div>
+  <div class="overlay">
+    <div id="No4">
+		<div class="center">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+      <p class="loading">正在加载</p>
+		</div>
+	</div>
   </div>
 </template>
 
 <style>
-.spinner {
-  margin: 100px auto;
-  width: 50px;
-  height: 60px;
-  text-align: center;
-  font-size: 10px;
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0);
 }
- 
-.spinner > div {
-  background-color: #67CF22;
-  height: 100%;
-  width: 6px;
-  display: inline-block;
-   
-  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
-  animation: stretchdelay 1.2s infinite ease-in-out;
+
+#No4{width:500px;height:250px;background: #f2f2f2;position: relative;margin:300px auto;overflow: hidden}
+#No4 .center{position: relative;left: 15px;top:40%;}
+#No4 span{width: 6px;height:6px;background: #1779ba;position: absolute;display: block;border-radius: 5px;left: -30px;animation:No_4 2s infinite ease-out;}
+#No4 span:nth-child(2){animation-delay:0.15s;}
+#No4 span:nth-child(3){animation-delay:0.3s;}
+#No4 span:nth-child(4){animation-delay:0.45s;}
+#No4 span:nth-child(5){animation-delay:0.6s;}
+
+@keyframes No_4{
+  0%{transform:translateX(0);}
+  50%{transform:translateX(236px);}
+  51%{transform:translateX(239px);}
+  52%{transform:translateX(242px);}
+  53%{transform:translateX(245px);}
+  54%{transform:translateX(248px);}
+  55%{transform:translateX(251px);}
+  56%{transform:translateX(254px);}
+  57%{transform:translateX(257px);}
+  58%{transform:translateX(260px);}
+  100%{transform:translateX(510px);}
 }
- 
-.spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
- 
-.spinner .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
-}
- 
-.spinner .rect4 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
- 
-.spinner .rect5 {
-  -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
-}
- 
-@-webkit-keyframes stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) } 
-  20% { -webkit-transform: scaleY(1.0) }
-}
- 
-@keyframes stretchdelay {
-  0%, 40%, 100% {
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% {
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
+
+.loading {
+  position: relative;
+  top: 30px;
 }
 </style>
 

@@ -30,11 +30,14 @@
     </div>
     <button class="button" @click="submit">确认提交</button>
     <button class="button alert" @click="cancle">取消</button>
+
+    <loading v-if="isloading"></loading>
   </div>
 </template>
 
 <script>
 import goBack from '../GoBack'
+import loading from '../Loading'
 export default {
   props: ['type', 'id'],
   data () {
@@ -46,7 +49,8 @@ export default {
       image: '',
       imageId: '',
       file: '',
-      imageSize: 0
+      imageSize: 0,
+      isloading: false
     }
   },
   created () {
@@ -56,7 +60,8 @@ export default {
     }
   },
   components: {
-    goBack: goBack
+    goBack: goBack,
+    loading: loading
   },
   methods: {
     onFileChange (e) {
@@ -120,6 +125,19 @@ export default {
       }
     },
     uploadImage () {
+      if (this.projectName === '') {
+        alert('项目名称不能为空')
+        return
+      }
+      if (this.classify === '') {
+        alert('分类不能为空')
+        return
+      }
+      if (this.image === '') {
+        alert('图片不能为空')
+        return
+      }
+      this.isloading = true
       let formData = new FormData()
       formData.append('image', this.file)
       formData.append('remark', '项目图')
@@ -136,11 +154,25 @@ export default {
         } else if (res.data.code === '401') {
           self.$router.push('/admin/login')
         } else {
+          self.isloading = false
           alert('请选择一张图片')
         }
       })
     },
     update () {
+      if (this.projectName === '') {
+        alert('项目名称不能为空')
+        return
+      }
+      if (this.classify === '') {
+        alert('分类不能为空')
+        return
+      }
+      if (this.image === '') {
+        alert('图片不能为空')
+        return
+      }
+      this.isloading = true
       let self = this
       let data = {
         projectId: this.id,
@@ -151,6 +183,7 @@ export default {
       }
       this.$http.post('/api/project/update', data)
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           alert('更新项目成功')
           self.$router.go(-1)
@@ -171,6 +204,7 @@ export default {
       let self = this
       this.$http.post('/api/project/create', data)
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           alert('新增项目成功')
           self.$router.go(-1)
