@@ -52,19 +52,22 @@
         <span v-else>下一页<span class="show-for-sr">page</span></span>
       </li>
     </ul>
+
+    <loading v-if="isloading"></loading>
   </div>  
 </template>
 
 <script>
 import Nav from '../Nav'
-
+import loading from '../Loading'
 export default {
   data () {
     return {
       list: [],
       total: 0,
       currentPage: 1,
-      PAGE_SIZE: 5
+      PAGE_SIZE: 5,
+      isloading: false
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -79,7 +82,8 @@ export default {
     this.queryNews()
   },
   components: {
-    appNav: Nav
+    appNav: Nav,
+    loading: loading
   },
   computed: {
     lastPage () {
@@ -95,8 +99,10 @@ export default {
         pageSize: this.PAGE_SIZE
       }
       let self = this
+      self.isloading = true
       this.$http.post('/api/news/query', data)
       .then((res) => {
+        self.isloading = false
         if (res.data.code === '0') {
           self.list = res.data.newsList
           self.total = res.data.total

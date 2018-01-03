@@ -26,15 +26,18 @@
     </table>
 
     <button class="button" @click="toCaseAdd('add')">新增案例</button>
+    <loading v-if="isloading"></loading>
   </div>
 </template>
 
 <script>
 import appNav from '../Nav'
+import loading from '../Loading'
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      isloading: false
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -49,7 +52,8 @@ export default {
     this.query()
   },
   components: {
-    appNav: appNav
+    appNav: appNav,
+    loading: loading
   },
   methods: {
     toCaseAdd (type, id, name, remark) {
@@ -60,8 +64,10 @@ export default {
     },
     query () {
       let self = this
+      self.isloading = true
       this.$http.post('/api/case/query', {})
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           self.list = res.data.caseList
         }

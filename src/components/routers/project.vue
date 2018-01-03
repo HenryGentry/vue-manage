@@ -43,18 +43,21 @@
         <span v-else>下一页<span class="show-for-sr">page</span></span>
       </li>
     </ul>
+    <loading v-if="isloading"></loading>
   </div>
 </template>
 
 <script>
 import appNav from '../Nav'
+import loading from '../Loading'
 export default {
   data () {
     return {
       list: [],
       total: 0,
       currentPage: 1,
-      PAGE_SIZE: 5
+      PAGE_SIZE: 5,
+      isloading: false
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -74,7 +77,8 @@ export default {
     }
   },
   components: {
-    appNav: appNav
+    appNav: appNav,
+    loading: loading
   },
   methods: {
     toProjectAdd (type, id) {
@@ -84,12 +88,14 @@ export default {
     query (index) {
       index = index || 1
       let self = this
+      this.isloading = true
       this.currentPage = index
       this.$http.post('/api/project/query', {
         pageIndex: index,
         pageSize: self.PAGE_SIZE
       })
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           self.list = res.data.projectList
           self.total = res.data.total

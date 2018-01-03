@@ -30,6 +30,7 @@
     <input type="file" id="upload" accept="image/*" @change="onFileChange" class="show-for-sr" >
 
     <input type="checkbox" v-model="status"><label>是否发布</label>
+    <loading v-if="isloading"></loading>
   </div>
 </template>
 
@@ -39,7 +40,7 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import { quillEditor } from 'vue-quill-editor'
 import goBack from '../GoBack'
-
+import loading from '../Loading'
 export default {
   props: ['type', 'id'],
   data () {
@@ -51,12 +52,14 @@ export default {
       classify: '',
       content: '',
       addRange: [],
-      status: true
+      status: true,
+      isloading: false
     }
   },
   components: {
     quillEditor,
-    goBack: goBack
+    goBack: goBack,
+    loading: loading
   },
   computed: {
     editor () {
@@ -168,10 +171,12 @@ export default {
     },
     queryNews () {
       let self = this
+      self.isloading = true
       this.$http.post('/api/news/getById', {
         newsId: self.id
       })
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           self.title = res.data.news.newsTitle
           self.content = res.data.news.newsContent

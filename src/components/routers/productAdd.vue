@@ -95,10 +95,12 @@ export default {
     },
     query () {
       let self = this
+      self.isloading = true
       this.$http.post('/api/product/getById', {
         productId: self.id
       })
       .then(res => {
+        self.isloading = false
         if (res.data.code === '0') {
           self.productName = res.data.product.productName
           self.productDesc = res.data.product.productDesc
