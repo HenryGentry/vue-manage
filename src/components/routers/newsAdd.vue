@@ -24,11 +24,20 @@
       ref="quillEditor"
       v-model="content">
     </quill-editor>
-    <button class="button" @click="submit">确认提交</button>
 
     <label for="upload" id="imgInput" class="button" style="display: none;">上传图片</label>
     <input type="file" id="upload" accept="image/*" @change="onFileChange" class="show-for-sr" >
 
+    <div v-if="!image">
+      <label for="fengmian" class="button">上传封面</label>
+      <input type="file" id="fengmian" accept="image/*" @change="fengmianChange" class="show-for-sr">
+    </div>
+    <div v-else>
+      <img :src="image" class="custom-image">
+      <button class="button float-center" @click="removeImage">移除图片</button>
+    </div>
+
+    <button class="button" @click="submit">确认提交</button>
     <input type="checkbox" v-model="status"><label>是否发布</label>
     <loading v-if="isloading"></loading>
   </div>
@@ -53,7 +62,10 @@ export default {
       content: '',
       addRange: [],
       status: true,
-      isloading: false
+      isloading: false,
+      image: '',
+      imgId: '',
+      file: ''
     }
   },
   components: {
@@ -92,46 +104,15 @@ export default {
         alert('新闻内容不能为空')
         return
       }
-      let status = this.status ? '1' : '0'
-
-      let self = this
-      if (this.type === 'add') {
-        let data = {
-          newsTitle: self.title,
-          newsAuthor: self.author,
-          newsCategoryId: self.classify,
-          newsRemark: self.remark,
-          newsContent: self.content,
-          newsStatus: status
-        }
-        this.$http.post('/api/news/create', data)
-        .then(res => {
-          if (res.data.code === '0') {
-            alert('保存新闻成功')
-            self.$router.push('news')
-          } else {
-            alert('保存新闻失败')
-          }
-        })
-      } else if (this.type === 'update') {
-        let data = {
-          newsId: self.id,
-          newsTitle: self.title,
-          newsAuthor: self.author,
-          newsCategoryId: self.classify,
-          newsRemark: self.remark,
-          newsContent: self.content,
-          newsStatus: status
-        }
-        this.$http.post('/api/news/update', data)
-        .then(res => {
-          if (res.data.code === '0') {
-            alert('成功修改新闻')
-            self.$router.push('news')
-          } else {
-            alert('修改新闻失败')
-          }
-        })
+      if (this.image === '') {
+        alert('新闻封面不能为空')
+        return
+      }
+      this.isloading = true
+      if (this.imgId === '' || this.imgId !== null) {
+        this.uploadImage()
+      } else {
+        this.update()
       }
     },
     imgHandler () {
@@ -155,6 +136,76 @@ export default {
           self.content = self.content + '<img src=' + imgUrl + '>'
         } else {
           alert('插入图片失败')
+          self.isloading = false
+        }
+      })
+    },
+    uploadImage () {
+      let formData = new FormData()
+      formData.append('image', this.file)
+      formData.append('remark', '新闻封面图')
+      let self = this
+      return self.$http.post('/api/image/upload', formData)
+      .then(res => {
+        if (res.data.code === '0') {
+          self.imgId = res.data.imgId
+          if (self.type === 'update') {
+            self.update()
+          } else {
+            self.add()
+          }
+        } else if (res.data.code === '401') {
+          self.$router.push('/admin/login')
+        } else {
+          self.isloading = false
+          alert('请选择一张封面图')
+        }
+      })
+    },
+    add () {
+      let self = this
+      let status = this.status ? '1' : '0'
+      let data = {
+        newsTitle: self.title,
+        newsAuthor: self.author,
+        newsCategoryId: self.classify,
+        newsRemark: self.remark,
+        newsContent: self.content,
+        newsStatus: status,
+        newsCoverId: self.imgId
+      }
+      this.$http.post('/api/news/create', data)
+      .then(res => {
+        self.isloading = false
+        if (res.data.code === '0') {
+          alert('保存新闻成功')
+          self.$router.push('news')
+        } else {
+          alert('保存新闻失败')
+        }
+      })
+    },
+    update () {
+      let self = this
+      let status = this.status ? '1' : '0'
+      let data = {
+        newsId: self.id,
+        newsTitle: self.title,
+        newsAuthor: self.author,
+        newsCategoryId: self.classify,
+        newsRemark: self.remark,
+        newsContent: self.content,
+        newsStatus: status,
+        newsCoverId: self.imgId
+      }
+      this.$http.post('/api/news/update', data)
+      .then(res => {
+        self.isloading = false
+        if (res.data.code === '0') {
+          alert('成功修改新闻')
+          self.$router.push('news')
+        } else {
+          alert('修改新闻失败')
         }
       })
     },
@@ -184,10 +235,35 @@ export default {
           self.status = res.data.news.newsStatus === 1
           self.classify = res.data.news.newsCategoryId
           self.remark = res.data.news.newsRemark
+          self.imgId = res.data.news.newsCoverId
+          self.image = res.data.news.newsCoverUrl
         } else if (res.data.code === '401') {
           self.$router.push('/admin/login')
         }
       })
+    },
+    fengmianChange (e) {
+      let files = e.target.files || e.dataTransfer.files
+      if (!files.length) {
+        return
+      }
+      this.file = files[0]
+      if (this.file.size > 4194304) {
+        alert('图片太大，请重新选择')
+        return
+      }
+      this.createImage(this.file)
+    },
+    createImage (file) {
+      let reader = new FileReader()
+      let self = this
+      reader.onload = e => {
+        self.image = e.target.result
+      }
+      reader.readAsDataURL(file)
+    },
+    removeImage () {
+      this.image = ''
     }
   }
 }

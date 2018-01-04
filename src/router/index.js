@@ -83,7 +83,7 @@ export default new Router({
           props: (route) => ({
             type: route.query.type,
             slideshowId: route.query.slideshowId,
-            index: route.query.orderNum,
+            order: route.query.orderNum,
             title: route.query.title,
             skip: route.query.skipUrl,
             mark: route.query.remark,
