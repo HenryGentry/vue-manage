@@ -20,8 +20,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: #050404;
-  opacity:0.85;
+  background-color: rgba(0, 0, 0, 0.25)
 }
 
 #No4{width:540px;height:125px;background: #f2f2f2;position: relative;margin:300px auto;overflow: hidden}

@@ -38,7 +38,7 @@
 import goBack from '../GoBack'
 import loading from '../Loading'
 export default {
-  props: ['type', 'slideshowId', 'index', 'title', 'skip', 'mark', 'img', 'imgId'],
+  props: ['type', 'slideshowId', 'order', 'title', 'skip', 'mark', 'img', 'imgId'],
   data () {
     return {
       slideshowName: '',
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     init () {
-      this.orderNum = parseInt(this.index) + 1
+      this.orderNum = this.order
       this.slideshowName = this.title
       this.skipUrl = this.skip
       this.remark = this.mark

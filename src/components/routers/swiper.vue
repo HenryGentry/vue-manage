@@ -25,7 +25,7 @@
             <td>
               <button 
                 class="button" 
-                @click="updateSwiper('update', item.slideshowId, item.slideshowName, item.skipUrl, item.remark, item.imgUrl, item.imgId)">
+                @click="updateSwiper('update', item.slideshowId, item.orderNum, item.slideshowName, item.skipUrl, item.remark, item.imgUrl, item.imgId)">
               修改</button>
               <button class="button alert" @click="deleteSlide(item.slideshowId)">删除</button>
             </td>
@@ -64,14 +64,15 @@ export default {
     this.query()
   },
   methods: {
-    updateSwiper (type, slideshowId, title, skipUrl, remark, imgUrl, imgId) {
+    updateSwiper (type, slideshowId, orderNum, title, skipUrl, remark, imgUrl, imgId) {
       title = title || ''
       skipUrl = skipUrl || ''
       remark = remark || ''
       imgUrl = imgUrl || ''
       slideshowId = slideshowId || ''
       imgId = imgId || ''
-      this.$router.push('swiperChange?type=' + type + '&slideshowId=' + slideshowId + '&orderNum=' + this.list.length + '&title=' + title + '&skipUrl=' + skipUrl + '&remark=' + remark + '&imgUrl=' + imgUrl + '&imgId=' + imgId)
+      orderNum = orderNum || this.list.length
+      this.$router.push('swiperChange?type=' + type + '&slideshowId=' + slideshowId + '&orderNum=' + orderNum + '&title=' + title + '&skipUrl=' + skipUrl + '&remark=' + remark + '&imgUrl=' + imgUrl + '&imgId=' + imgId)
     },
     query () {
       let self = this
